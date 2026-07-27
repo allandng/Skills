@@ -1,0 +1,8 @@
+__pycache__/
+*.py[cod]
+.DS_Store
+.venv/
+node_modules/
+
+# macOS AppleDouble sidecars (this repo is edited from a FAT32 volume)
+._*

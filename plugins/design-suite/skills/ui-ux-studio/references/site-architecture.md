@@ -1,0 +1,222 @@
+# Site architecture
+
+Two decisions this file governs: **how many pages the thing has**, and **which features survive**. Both get made before any visual work, and getting either wrong produces output that cannot be fixed by restyling.
+
+## Why this exists
+
+A remix of a seven-route Next.js site produced three directions, each delivered as a single HTML file. The source had `/`, `/about`, `/contact`, `/events`, `/join`, `/projects`, and `/team`, plus a shared layout with a navbar and footer. All of it was flattened onto one page per direction.
+
+That collapse then caused a second problem. Seven pages' worth of content on one page needs visual separation, so each section got its own background colour — and alternating section backgrounds is itself a recognizable AI tell (`ai-tells.md` §3). The source home page used exactly one background. The patchwork was introduced by the redesign, not inherited from it.
+
+So: a flatten decision made silently produced a styling tell downstream. Detect the shape first.
+
+## Step 1 — Detect the source shape
+
+| Shape | Recognize it by | Deliverable |
+|---|---|---|
+| **Single page** | One HTML file; nav links are `#anchors` | One file per direction |
+| **Multi-page static** | Several `.html` files; nav links are paths | One file per route, per direction |
+| **File-routed app** | `app/*/page.tsx`, `pages/*.tsx`, `src/routes/*`, `*.astro` in `pages/` | One file per route, per direction |
+| **SPA** | One entry point, a client router, route table in JS | One file per route, plus a note on the router |
+| **App behind auth** | Login wall, logged-in shell | Screens, not pages — see `modes.md` spec-to-ui |
+
+Commands that answer this in one pass:
+
+```bash
+find . -path ./node_modules -prune -o -type f \
+  \( -name "*.html" -o -name "page.tsx" -o -name "page.jsx" -o -name "*.astro" -o -name "+page.svelte" \) -print
+```
+
+Then read the nav component and note whether links are paths or anchors. Paths mean routes; anchors mean one page.
+
+## Step 2 — Write the route inventory
+
+For each route: its job, its content, and whether the nav actually reaches it.
+
+```
+ROUTE INVENTORY
+  route        job                                    content            in nav?
+  /            what this is, why care                 hero, slideshow    yes
+  /projects    what has been shipped                  3 projects         no  ← orphaned
+  /team        who is here                            12 members         no  ← orphaned
+  /events      what is happening                      3 past, 0 upcoming no  ← orphaned
+  /join        how to get in                           form link          yes
+  /about       longer story                            prose              no  ← orphaned
+  /contact     how to reach                            email, socials     no  ← orphaned
+```
+
+**Orphaned routes are a finding, not a detail.** In the case above, five of seven routes existed but were unreachable from the navbar. That is a genuine IA problem the redesign should fix — and it is exactly the kind of thing that gets silently erased if every route is flattened into one page, because the nav question stops existing.
+
+## Step 3 — Decide the page count deliberately
+
+Route parity is the default. Depart from it only with a stated reason, per route.
+
+**Keep it multi-page when:**
+- Any route is deep-linked or shared on its own — a join form, an event, a policy
+- Content per route is substantial enough that one page becomes a scroll marathon
+- Routes serve genuinely different intents (browsing vs. applying vs. contacting)
+- SEO matters and each route targets a distinct query
+- The archetype expects it — docs, editorial, and app UIs are page-per-thing by nature
+
+**Collapse to one page when:**
+- Total content genuinely fits without needing background bands to fake structure
+- Every section serves one linear intent, usually persuasion toward one action
+- The archetype supports it — a small event, a single product launch, a personal landing page
+- The user asked for a one-pager
+
+**The band test.** If you find yourself giving each section a different background to make the page legible, the page is doing too much. That is the signal to split, not to pick nicer band colours.
+
+**Consolidation is allowed, silence is not.** Merging `/about` into `/` can be right — a two-paragraph about page rarely earns a route. But say so, and say what happens to the old URL:
+
+```
+ROUTE PLAN
+  /            keep         + absorbs /about (74 lines of prose, does not earn a route)
+  /projects    keep         deep-linked from the club's own posts
+  /team        keep         12 members, 318 lines, the heaviest page
+  /events      keep         needs its own URL for sharing individual events
+  /join        keep         the conversion target; never bury a form in a scroll
+  /contact     merge → /join  one email and three links
+  /about       merge → /      redirect
+  RESULT       5 routes, down from 7. Both merges get redirects.
+  NAV          all 5 in the navbar — fixes the 5 orphaned routes in the source
+```
+
+## Step 4 — The feature inventory
+
+Separate from routes: what the site *does*. A remix is an editorial act, and the strongest one usually removes something.
+
+Inventory every feature, then assign each a verdict.
+
+```
+FEATURE INVENTORY
+  feature              status in source        verdict   reason
+  hero slideshow       used on /               KEEP      the photos are the best asset
+  typewriter heading   used on /               CUT       animates on every load, delays
+                                                         the one fact a visitor came for
+  news carousel        in repo, imported by    CUT       dead code; nothing to carousel
+                       nothing
+  theme toggle         shared layout           KEEP      already built, users expect it
+  card component       /about, /events         KEEP      the content is genuinely card-shaped
+  meeting time         absent                  ADD       the archetype's ten-second job
+                                                         and it is missing entirely
+  "next meeting" slot  absent                  ADD but   0 scheduled right now, so it needs
+                                               guard     an honest empty state, not a
+                                                         readout that reads as inactive
+```
+
+Verdicts:
+
+- **KEEP** — earns its place. Say why.
+- **CUT** — costs more than it gives. Decorative animation on the critical path, features with no content behind them, anything nobody uses.
+- **MERGE** — two features doing one job.
+- **ADD** — the archetype needs it and it is missing. Check `archetypes.md` for the ten-second job; the most common gap is that the single most important fact is nowhere on the page.
+- **ADD but guard** — needed, but the content is currently empty. Design the empty state first. A slot for "next meeting" with nothing scheduled must say something honest and forward-looking, not display a blank readout — see the empty-readout tell in `ai-tells.md` §9.
+
+**Dead features are worth hunting.** Something imported by nothing is a decision someone already abandoned. Confirm before cutting:
+
+```bash
+grep -rl "news-carousel\|NewsCarousel" --include="*.tsx" . | grep -v "components/ui/news-carousel"
+```
+
+**Never cut silently.** Anything removed goes in the handoff with its reason. The user may know why it is there.
+
+## Step 4b — Protect the signature
+
+Splitting routes correctly can still destroy the design. This is the failure this section exists to prevent, and it is caused by following Step 3 well.
+
+**What happened.** A club site was split from one flattened page into five correct routes. The club's strongest asset was nineteen photographs of its members. The route plan filed them where they belonged — twelve faces onto `/team`, project shots onto `/projects`, event shots onto `/events`. Every placement was right. The landing page was left with two photographs and a lot of text, and all three directions came out weaker than the single-page version they replaced.
+
+The earlier one-page build had put twenty-one of those photographs into a wall on the front page. **The wall only works as a wall.** Distributed across five routes at three or four per page, the same asset stops being a signature and becomes ordinary galleries.
+
+### Name the primary asset
+
+Before planning routes, identify what the site's strongest asset actually is, and whether its power depends on concentration:
+
+| Asset | Concentration-dependent? |
+|---|---|
+| A large set of real photographs | **Yes** — a wall of twenty reads differently from four pages of five |
+| A map, timeline, or diagram covering everything | **Yes** — partial views lose the whole |
+| A dense table or index | **Yes** — the scale is the point |
+| One hero image or film | No — it works alone |
+| Written voice | No — it travels with the text |
+| A live demo or interactive tool | No, but it needs one obvious home |
+
+### The rules
+
+1. **The signature gets a home, and the home is the landing page** unless there is a stated reason otherwise. A visitor who never clicks past `/` must still meet the signature.
+2. **A route split may not strip the landing page of the signature.** If the plan moves the primary asset off `/`, either keep a full-strength instance there or change the plan.
+3. **Concentration-dependent assets are not divided.** Put the wall on one page at full strength; other routes may reference it, but they do not get slices of it.
+4. **Distribution is not preservation.** Twenty-three photographs spread over five pages is not the same asset as twenty-one on one page, even though the count went up.
+
+### The landing-page test
+
+After writing the route plan and before building, answer in one sentence: **what is on the landing page now?**
+
+- "A wall of twenty faces, the name, and where we meet" — the signature survived.
+- "A hero photo, three text blocks, and a project list" — the split took the design with it. Go back.
+
+Record it:
+
+```
+PRIMARY ASSET      19 member photographs
+CONCENTRATION      dependent — the wall is the design
+HOME               / at full strength (all 19)
+ELSEWHERE          /team gets the roster with portraits; /projects and
+                   /events reference the wall, they do not subdivide it
+LANDING PAGE       a wall of 19 faces, the club name, and the meeting room
+```
+
+## Step 5 — Build with a shared shell
+
+Multi-page output needs one shell, not N copies. Duplicating a navbar across seven files guarantees they drift.
+
+- **Static HTML:** keep the shell in one place and include it, or generate the pages from a template. If neither is possible, keep the shell markup byte-identical across files and say in the handoff that it is duplicated and needs consolidating.
+- **Framework:** use the framework's layout primitive — `app/layout.tsx`, `+layout.svelte`, `Layout.astro`.
+- **Tokens live in one stylesheet** shared by every page. This is what makes the direction one design instead of seven similar ones.
+
+Per-page work is content and layout only. If a page needs a token the system does not have, that is a system extension — document it (see `modes.md` update mode, Step 4).
+
+## Step 6 — Deliverable structure
+
+One **directory** per direction, not one file.
+
+```
+02-directions/
+├── index.html                  ← comparison page linking all three
+├── shared/
+│   └── tokens.css              ← if the directions share a scaffold
+├── register/
+│   ├── tokens.json
+│   ├── favicon.svg
+│   ├── index.html
+│   ├── projects.html
+│   ├── team.html
+│   ├── events.html
+│   └── join.html
+├── standby/   … same routes
+└── contactsheet/   … same routes
+```
+
+Rules:
+
+- **Route parity across directions.** All three ship the same route set, or they are not comparable — a direction with fewer pages will look cleaner for reasons that have nothing to do with its design.
+- **Working navigation.** Links resolve between the files. A direction you cannot click through is a mockup, not a redesign.
+- **Every page gets the head block.** Same favicon per direction, per-page titles following one pattern (`favicon-and-head.md` §3).
+- **Name by thesis**, not by number: `register/`, not `variant-1/`.
+
+If the environment genuinely cannot produce multiple files, build the primary route in full and specify the others — but say that is what happened, and never present a flattened page as the redesign of a multi-route site.
+
+## Handoff
+
+```
+SOURCE SHAPE    detected shape, route count, shared-shell components
+PRIMARY ASSET   what it is, whether it is concentration-dependent, where it
+                lives, and what the landing page looks like as a result
+ROUTE PLAN      per route: keep / merge / split, with reasons and redirects
+NAV CHANGES     what the nav exposes now vs. before, orphans fixed
+FEATURES        keep / cut / merge / add, with reasons
+BACKGROUNDS     how many distinct section backgrounds per page, and why
+DEAD CODE       found and confirmed unused
+```
+
+The `BACKGROUNDS` line is a deliberate forcing function. Having to write the number down is usually enough to notice that a page has five of them.

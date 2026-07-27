@@ -4,13 +4,13 @@ Before any visual decision, answer one question: **what kind of thing is this?**
 
 This step exists because of a specific, repeatable failure. A design can be well-spaced, accessible, distinctive, and pass every tell check, and still be wrong — because it was built to the conventions of a category the subject does not belong to. The most common version is a small, human, low-stakes thing dressed as a large, institutional, high-stakes one. Nothing in a token system catches that. Only the archetype does.
 
-## Diagnosis: the SPARC case
+## Diagnosis: the ORBIT case
 
-Three directions were produced for a twelve-person student club with three shipped projects and no meeting currently scheduled. Two failed and one worked, and the difference was entirely archetype fit.
+ORBIT is a composite example, not a real client. Three directions were produced for a twelve-person student club with three shipped projects and no meeting currently scheduled. Two failed and one worked, and the difference was entirely archetype fit.
 
-- **A · The Register** framed the club as an institutional archive: accession numbers (`SPARC·2025·P01`), "members on the books," "register opened 2025 · revised April 2026," "entries are numbered on opening and stamped on delivery." Eleven distinct pieces of institutional-weight language.
+- **A · The Register** framed the club as an institutional archive: accession numbers (`ORBIT·2025·P01`), "members on the books," "register opened 2025 · revised April 2026," "entries are numbered on opening and stamped on delivery." Eleven distinct pieces of institutional-weight language.
 - **B · Standby** framed it as an operations dashboard: "Status: live," "Crew 12," "3 / 3 shipped, 0 currently running," "Next session: None set." Nine such terms. The live status board's main achievement was advertising that nothing was happening.
-- **C · Contact Sheet** framed it as a room with people in it: "Twelve people, one room, three shipped products." "Mohammed, the club president, brought in CollegiateX — and every member got an internship building their mobile app." One such term.
+- **C · Contact Sheet** framed it as a room with people in it: "Twelve people, one room, three shipped products." "The club president brought in our first outside client — and every member got an internship building their mobile app." One such term.
 
 All three passed the divergence matrix. All three had defensible token systems. Two were still wrong, because a twelve-person club is not an archive and does not have live operational state. The concept itself was the tell — not the CSS.
 

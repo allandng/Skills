@@ -39,6 +39,23 @@ Six to eight semantic colors is enough. More means the system is doing the decid
 
 **Sourcing.** Derive from the subject, per `ai-tells.md` §1. Give neutrals a temperature borrowed from the palette rather than using an untinted gray ramp — tinted neutrals are one of the clearest signals of a designed palette versus a picked one.
 
+### Ramps
+
+A flat palette — one hex per role — can only fill a surface at full strength or not at all. That constraint quietly forces a boundary style: with no tints available, the only way to separate a card from the page is a border or a heavy shadow, and the design goes boxy by necessity rather than by choice.
+
+Give each chroma color a small ramp and the soft options become real:
+
+```
+--accent-100   tinted fills: hover states, quiet backgrounds, selected rows
+--accent-300   soft emphasis: tags, meter tracks, secondary data marks
+--accent-500   the color itself: primary actions, key data
+--accent-700   pressed states, text-on-tint, links on hover
+```
+
+Three to five steps per chroma color. Generate them by holding hue and moving lightness (dropping chroma toward the light end), not by adding opacity — translucent tints composite unpredictably over imagery and break the contrast math. Neutrals already get a ramp (surface, raised, border, muted); this extends the same courtesy to the accents.
+
+Two rules: the semantic layer references ramp steps (`--color-hover: var(--accent-100)`), and components never reach into a ramp directly. Any text on a tinted fill must pass contrast against *that tint*, checked as a real pair.
+
 **Dark mode is a design, not an inversion.** Reduce chroma on dark grounds; saturated colors vibrate. Surfaces get *lighter* to come forward, not darker. Shadows barely work — use elevation via surface lightness and border instead. Verify contrast independently for each theme.
 
 Run `scripts/contrast.py` on the finished palette.
@@ -69,6 +86,24 @@ One scale, 4px or 8px base, geometric rather than linear:
 4 · 8 · 12 · 16 · 24 · 32 · 48 · 64 · 96 · 128
 ```
 
+### Proximity encodes grouping
+
+Spacing is not decoration between elements — it is the notation that says which elements belong together. Two things close together read as one unit; the same two things at equal distance from everything else read as unrelated.
+
+**The rule is relative, not absolute:** the gap *within* a group must be visibly smaller than the gap *to the next group* — a step or two apart on the scale, not a few pixels. A heading, its eyebrow, and its subtext form one cluster; the button that follows belongs to the cluster but sits further out; the next section is further still.
+
+```
+eyebrow            gap: one step   (tightest — it labels the heading)
+HEADING            gap: one step   (subtext explains the heading)
+subtext            gap: three steps (the action is related, not part of the text)
+[ button ]
+                   gap: six steps  (next section is a different thought)
+```
+
+The common failure is uniform spacing: every element the same distance apart, so nothing groups and the eye has no structure to follow. That is also what makes a page reach for background bands to fake the structure spacing should have provided (`ai-tells.md` §3).
+
+Do not hardcode the pixel values. A dense dashboard and a spacious marketing page express the same relationships at different magnitudes — the *ratios* carry across, the numbers do not.
+
 Density changes the scale, not the system:
 - **Spacious** — start at 24, go to 128. Marketing, editorial.
 - **Standard** — 16 to 64. Most product UI.
@@ -76,11 +111,27 @@ Density changes the scale, not the system:
 
 Section spacing must differ by hierarchy level. Uniform `py-24` on every section is a tell (`ai-tells.md` §3) because it flattens structure into a stack.
 
-## Radius, elevation, border
+## Form language: radius, elevation, boundary
 
-Pick a radius personality and hold it: sharp (0–2px), soft (4–8px), round (12–16px), or pill. Mixing `rounded-2xl` cards with `rounded-sm` inputs looks accidental unless it encodes a distinction.
+Radius, shadow, and border are one decision, not three — together they are the form language, and it gets derived from the subject like everything else. Soft is not friendlier by default; sharp is not more serious by default.
 
-Three elevation levels maximum: flat, raised, overlay. Every card at `shadow-lg` means no card is elevated.
+**Pick one boundary treatment** and hold it:
+
+| Treatment | Mechanics | Character |
+|---|---|---|
+| Border-delimited | flat fills, 1px borders, radius 0–4 | drawn, technical, printed |
+| Rule-delimited | no boxes — hairline rules and whitespace do the separating | editorial, archival |
+| Elevation-layered | no borders; surface color plus a soft shadow separates layers | soft, physical, product |
+| Tint-layered | no borders, no shadows; nested tinted fills from the ramps | calm, flat, modern |
+
+Mixing treatments on one surface — a bordered card *with* a shadow *with* a tinted fill — is how boxes turn to mud. And the most common *unforced* boxiness is defaulting to border-delimited because the palette has no ramps: with tints and layering available, a card can sit on the page with no border at all.
+
+**Radius personality**, held consistently: sharp (0–2), soft (4–8), round (12–16), pill. Two refinements:
+
+- **Radius scales with the container.** A large card carries a larger radius than the button inside it; derive it (`calc(var(--radius-lg) * 1.15)`) rather than inventing a new stop.
+- **Nested corners share a center:** inner radius ≈ outer radius minus the padding between them. An inner element with its container's exact radius looks subtly wrong at the corners.
+
+**Elevation:** three levels maximum — flat, raised, overlay. Every card at `shadow-lg` means no card is elevated. The non-tell hover idiom is a small lift — `translateY(-2px)` plus one shadow step — not `scale()`.
 
 ## Motion tokens
 

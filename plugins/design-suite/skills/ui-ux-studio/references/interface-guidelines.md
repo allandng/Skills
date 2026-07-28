@@ -68,6 +68,16 @@ When time is short, work down this list. Items 1–3 are non-negotiable; 4–7 s
 - Destructive actions get a confirmation or an undo window. Never immediate.
 - Loading copy ends with `…`: "Saving…", "Loading…".
 
+### Text over imagery
+
+Photographs have no contrast contract. A caption that is legible against one image vanishes against the next, and a hero that works with today's photo breaks when someone swaps it.
+
+- **Prefer beside over on top.** Text placed above, below, or beside an image has a controlled background and no legibility risk. This is the default; overlay is the exception that has to be argued for.
+- **When overlaying, guarantee the ground.** A scrim, a gradient, a solid plate behind the text, or a deliberately low-detail region of the image. Do not rely on the photograph happening to be dark where the text sits.
+- **Verify against the worst image**, not the chosen one. If users or a CMS supply the images, assume the brightest, busiest one will appear.
+- **Contrast rules still apply** — 4.5:1 for body, 3:1 for large text, measured against the actual composited background including the scrim.
+- **Never place text over the subject** of the photograph. Faces and focal points fight the type and both lose.
+
 ## 5. Performance and layout stability
 
 - `<img>` always gets explicit `width` and `height`. Missing dimensions is the top cause of layout shift.

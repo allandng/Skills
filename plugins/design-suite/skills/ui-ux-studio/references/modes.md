@@ -94,7 +94,7 @@ This matters because the user usually cannot articulate why the site feels gener
 
 This is the mechanism that makes the three directions actually different. Fill in this matrix **before designing anything**.
 
-Each direction must differ from both others on **at least four of these seven axes**. Not one. Four.
+Each direction must differ from both others on **at least four of these eight axes**. Not one. Four.
 
 Choose axes using the survey from Step 2c. Prefer `CONTESTED` axes — where the category has no consensus, a position costs nothing in comprehension. Check every choice against what the peer set already does: an axis where all eight peers agree is either load-bearing convention (keep it) or herd behavior (the best differentiation available). Deciding which is which is the point of having run the survey.
 
@@ -107,6 +107,30 @@ Choose axes using the survey from Step 2c. Prefer `CONTESTED` axes — where the
 | **Density** | spacious / standard / dense |
 | **Motion philosophy** | still / one orchestrated moment / continuous ambient / interaction-only / physical-feeling |
 | **Signature device** | typographic / photographic / diagrammatic / data-as-decoration / material-texture / illustrative / interactive |
+| **Form language** | border-delimited / rule-delimited / elevation-layered / tint-layered, each with a radius personality (sharp / soft / round / pill) |
+
+## Hard constraints
+
+Before the divergence matrix, write down the constraints that are **facts, not preferences** — things where a violating design is not worse, it is wrong. Collect them from the brief, from the codebase, and from response headers on the live site:
+
+```
+HARD CONSTRAINTS
+  network      e.g. connect-src 'none' on tool pages — zero external
+               requests, so no webfonts, icon CDNs, analytics, embeds
+  weight       e.g. engine is 724 KB; CSS+JS budget per page
+  privacy      e.g. no cookies -> no consent banner; no accounts
+  legal/brand  mandated colors, marks, disclosures
+  platform     browser support floor, no-JS behavior, print
+  performance  LCP/CLS/INP targets when contractual or measured
+```
+
+Three rules:
+
+- **Constraints are invariants across all three directions.** They are not axes to diverge on. A direction cannot "trade away" a constraint for a look.
+- **A security or privacy header is a product feature, not a deploy detail.** `connect-src 'none'` on a converter, or an absent cookie banner on a privacy tool, may be the whole pitch. The design serves it; it does not negotiate with it.
+- **Verify, don't trust the plan.** After building, actually check: grep the output for external URLs, count the added bytes, load a page with the network throttled to nothing. `ai_tells.py` flags `fonts.googleapis.com` imports as a taste tell — on a zero-external-request site the same hit is a constraint violation, which is worse.
+
+State the register in the plan and repeat it in each direction's presentation, with how that direction satisfies it.
 
 ## Step 4b — The fit gate
 
@@ -116,6 +140,7 @@ Choose axes using the survey from Step 2c. Prefer `CONTESTED` axes — where the
 2. **Scale honesty.** Does the concept imply more weight, activity, or permanence than the subject has? Run the table in `archetypes.md` §3.
 3. **Content fit.** Does the concept need content that does not exist? A direction requiring testimonials for a subject with no users is asking you to invent them.
 4. **Signature survival.** If the concept depends on a concentration-dependent asset — a wall of photographs, a full timeline, a dense index — does the route plan from Step 2b keep it concentrated on the landing page? Run the landing-page test in `site-architecture.md` §4b. A concept whose signature ends up spread four-per-page across five routes has been neutralized, and it will read as weaker than a worse concept that kept its asset intact.
+5. **Constraint compliance.** Check every direction against the hard-constraint register (the "Hard constraints" register above). A direction that needs a webfont on a zero-external-request site, or a cookie on a no-cookies product, is disqualified — not adjusted, disqualified, because the constraint is usually the product's claim and "adjusting" it means quietly breaking the thing being sold.
 
 This gate exists because of a specific failure. Three directions were built for a twelve-person student club with three shipped projects and no scheduled meeting. All three passed the divergence matrix. Two failed anyway:
 
@@ -171,6 +196,8 @@ ARCHETYPE FIT       why this archetype supports this concept, and what it
 DIVERGENCE          which axes it takes and how it differs from the others
 BEST WHEN           the conditions under which this is the right choice
 PAGES               the routes it ships, and backgrounds per page
+CONSTRAINTS         how it satisfies each hard constraint, with the
+                    weight it added
 SIGNATURE           what it is, where it lives, and what the landing page
                     looks like as a result
 VS CATEGORY         how it differs from the peer set, not just from A and B
@@ -260,6 +287,8 @@ For each of the three, state:
 - Which user it serves best
 
 Then apply the divergence matrix from remix Step 4 to the visual layer, so the three are distinct aesthetically as well as structurally.
+
+If any model involves multi-step journeys — sign-up, onboarding, setup, checkout — produce the flow inventory from `flows.md` §6 alongside the interface inventory. Branching and escape hatches are where these models actually differ in cost, and that difference is invisible in a screen-by-screen comparison.
 
 ## Step 4 — Build
 
@@ -469,6 +498,8 @@ Forming an opinion before this is complete produces cosmetic notes instead of st
 | Responsiveness | Intentional at every viewport, not just non-broken? |
 | Accessibility | Contrast, keyboard path, focus visibility, ARIA, screen-reader order |
 | **Archetype fit** | Run `archetypes.md`. Is this built to the conventions of the category it actually belongs to? Does it imply more scale than it has? |
+| **Flows** | Run `flows.md`. Escape hatch at every step? Irrelevant steps skipped? Back preserves data? Partial state survives abandonment? |
+| **Conventions** | Run `conventions.md`. Are the load-bearing conventions intact? Is any marketing-page advice being applied to an archetype it does not fit? |
 | **Copy** | Run `copy-gate.md`. Buttons, errors, empty states, invented content, borrowed-weight language |
 | **Distinctiveness** | Run `ai-tells.md`. Could this be any other product? |
 

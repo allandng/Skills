@@ -90,6 +90,41 @@ Note that `ARCHETYPE`, `SCALE`, and `PRIMARY ASSET` come first. They are the con
 
 Note what makes this plan non-generic: every choice traces to something in the subject's actual world — rag paper, annotation pencils, field-case powder coating, herbarium label ruling, runs of hundreds. Swap in a different brief and none of it survives, which is the test.
 
+
+### The same procedure, a soft subject
+
+The Ashfield plan derives sharp — and most of this skill's case law does, which is itself a gravity worth counterweighting. Here is the compact plan for a subject that derives the opposite form language, using the ramp and layering machinery from `design-tokens.md`:
+
+```
+ARCHETYPE   Program UI (community tool), borrowing from local business
+            for the pickup-point pages
+SCALE       one neighborhood · ~300 members · 2 seasons · ~1,900 swaps
+SUBJECT     Bramble — a seed-swap ledger for a neighborhood garden
+            network. Used at kitchen tables and greenhouse benches.
+THESIS      This is a potting bench, not a marketplace. Paper envelopes
+            and pencil, not inventory software.
+PALETTE     From seed packets and greenhouse glass:
+            --surface  #F7F3E8   manila envelope
+            --ink      #2B2A24   pencil, warm black
+            --leaf     #4C7A4F   with a 100/300/500/700 ramp — the 100
+                       is the tinted fill that lets a card sit on the
+                       page with no border at all
+            --bloom    #C77B54   terracotta pot; accent-2, small ramp
+FORM        elevation-layered, round (12–16). No borders anywhere;
+            surface plus one soft shadow level separates the layers,
+            hover is translateY(-2px) plus one shadow step.
+TYPE        Display: rounded humanist (seed-packet lettering lineage).
+            Body: quiet serif. Utility: mono for lot numbers and dates.
+SIGNATURE   The germination row — each listing carries a row of dots,
+            one per day since sowing, sized by sprout count. Data as
+            decoration, derived from what gardeners actually track.
+RISK        No search on the front page; browsing by what's ready this
+            week mirrors a swap table. Accepted: one neighborhood,
+            nobody is filtering 10,000 listings.
+```
+
+Why soft is *earned* here and would be wrong for Ashfield: Bramble's materials are paper envelopes, seedlings, and hand-written labels — round, layered, tinted. Ashfield's are archival sheets, rulings, and accession stamps — sharp, ruled, flat. Same procedure, opposite outputs. If both plans had arrived at the same form language, one of them would be a default wearing a costume.
+
 ---
 
 ## B. Divergence matrix (remix mode, Step 4)

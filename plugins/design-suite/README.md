@@ -117,8 +117,10 @@ Two are worth calling out beyond the gates above:
 
 The rest: `archetypes.md`, `copy-gate.md`, `ai-tells.md`, `design-tokens.md`, `favicon-and-head.md`,
 `interface-guidelines.md`, `modes.md`, `motion.md`, `site-architecture.md`, `stack-notes.md`, plus
-`assets/worked-example.md` — a fully filled-in design plan and divergence matrix, so the formats are
-concrete rather than abstract.
+`assets/worked-example.md` — two filled-in design plans and a divergence matrix, so the formats are
+concrete rather than abstract. The two plans run the same procedure on deliberately opposite
+subjects (one deriving sharp and ruled, one deriving round and layered) to show that the method,
+not a house style, is what produces the form language.
 
 ---
 

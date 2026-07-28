@@ -4,6 +4,18 @@ Every string a human reads passes through this before the work ships. Headlines,
 
 The reason this is a gate rather than a guideline: copy is the fastest-read part of an interface and the least protected. A page can survive every visual check and still announce itself on the first line of the hero. In the ORBIT case the concept failure was legible almost entirely through language — "members on the books," "entries are numbered on opening and stamped on delivery," "Status: live" — before anyone looked at the type.
 
+## First: decide whether the copy is the asset
+
+The gate runs in two directions, and running it the wrong way destroys value. Before editing anything, judge the existing copy:
+
+**Signs it is the asset:** specific numbers and named things instead of adjectives; limitations admitted voluntarily ("what we are not claiming", "this does not work for X"); sentences no competitor could publish; a register consistent enough to recognize. Copy like that took someone real effort and is doing real work.
+
+**When it is the asset, the gate inverts.** The job becomes *protection*: new strings must match its register, and the checklist question changes from "does this pass" to "could the person who wrote the original have written this." Do not smooth its quirks, do not lengthen what is deliberately short, do not replace dry precision with marketing warmth. In remix mode good copy is an **invariant** carried across all three directions unchanged; in update mode it is part of the system the seam test protects.
+
+**When it is not the asset** — template phrasing, borrowed weight, invented specifics — run the gate as written below.
+
+State which way you ran it in the handoff. "Copy gate: inverted, existing copy preserved as the register standard" is a decision; silently rewriting good copy is the same failure as restyling a good design.
+
 ## Order of operations
 
 1. **Check the archetype register first.** `archetypes.md` gives a register line per archetype. Copy that reads AI is very often copy written for the wrong archetype — startup-marketing voice on a student club, consumer polish on an internal tool. Fix the register before polishing sentences, or you will produce well-edited copy that is still wrong.
@@ -110,6 +122,7 @@ Test: **would the subject's own members use this word about themselves?** A stud
 
 ```
 COPY GATE
+  [ ] direction decided first: is the existing copy the asset?
   [ ] register matches the archetype, not a borrowed category
   [ ] borrowed-weight language checked against the real numbers
   [ ] every button names what happens

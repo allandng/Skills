@@ -35,6 +35,7 @@ Name the archetype explicitly and state it to the user before designing. When it
 | Open-source project | Developers evaluating whether to adopt; install and docs are the conversion |
 | Agency / studio | Selling taste; the site is itself the proof |
 | Course / educational | Structured progression, learner anxiety is the main design constraint |
+| Single-purpose utility | One job (convert, compress, generate, check); users arrive from search mid-task and leave when done |
 
 ## Step 2 — Answer these four
 
@@ -156,6 +157,16 @@ Each entry: the ten-second job, what content exists, what actually helps, the re
 **Register:** Technical, unadorned, honest about limitations.
 **Cosplay traps:** SaaS landing page for a library; enterprise language on a solo side project; benchmark charts with no methodology; a logo cloud of projects that merely depend on it.
 
+### Single-purpose utility
+
+**Ten seconds:** Can I do the thing, right here, right now — and is there a catch.
+**Content:** The tool itself. What it does and does not do. Limits stated plainly. Often N near-identical task pages (`/x-to-y`) that are simultaneously the tool and the search landing page — one template, not N designs (see `site-architecture.md` §2b).
+**Helps:** The tool at the top, working before any scroll. Zero steps between arrival and doing the job. Honest limitation statements — "what we are not claiming" builds more trust than any badge. If the pitch is privacy or local-only operation, make it **checkable in the interface**, not asserted in copy: a request counter at zero, a header the user can read, a works-offline test. Every competitor *says* files are safe; verifiable beats stated, and it cannot be copied by anyone who actually uploads.
+**Register:** Plain, precise, slightly dry. States costs and failure modes without flinching. No exclamation marks.
+**Cosplay traps:** SaaS marketing structure around a tool (pricing-page furniture on a free utility); trust badges in place of verifiable mechanisms; a hero that delays the tool; cookie banners and account walls on a privacy product — each is a network request or a data grab that contradicts the pitch; enterprise language on a single-purpose page.
+
+**Hard-constraint note.** Privacy-positioned utilities often carry technical invariants that are the product itself — a `connect-src 'none'` header, zero cookies, a strict weight budget next to a large engine. Record these in the hard-constraint register (`modes.md`) before designing. A redesign that adds one webfont to such a site has not styled it; it has broken it.
+
 ### Agency / studio
 
 **Ten seconds:** What kind of work, for whom, is it good.
@@ -186,6 +197,8 @@ State the primary and what it borrows: "Primary archetype: campus club. Borrows 
 ## Feeding this forward
 
 The archetype constrains every later step.
+
+Proof placement is archetype-determined too — what counts as evidence, and whether a proof slot should exist at all, is in `conventions.md` §3.
 
 | Later step | What the archetype supplies |
 |---|---|

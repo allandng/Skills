@@ -179,6 +179,8 @@ Current AI design output clusters hard around three complete looks. Recognize th
 
 Each is a real, good look for the right brief. The problem is that they appear *regardless of brief*. If the brief pins a direction, follow it exactly — the brief always wins. Where the brief leaves an axis free, do not spend that freedom on one of these three.
 
+**The correction for a default is not its opposite.** This catalogue flags soft defaults loudly — glass on everything, `rounded-2xl` + `shadow-lg`, hover-scale — because current AI output skews soft. Fleeing those tells into zero radius, flat fills, and hairline borders does not escape the problem; it lands in cluster look #3, which is on this same page. A design that is sharp because soft felt risky is exactly as undesigned as one that is soft by reflex. Sharp, soft, rounded, and pill are all legitimate outcomes of derivation and all illegitimate as reflexes — and `design-tokens.md` (Ramps, Form language) now has the machinery that makes the soft end executable without tripping the tells above: tinted fills instead of uniform glass, layered elevation instead of borders, a derived radius instead of one global `rounded-2xl`.
+
 ## 11. De-slopping procedure
 
 Given a design plan or a built page:

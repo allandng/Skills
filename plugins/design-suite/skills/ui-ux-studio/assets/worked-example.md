@@ -105,8 +105,9 @@ Three directions for the same existing site. The matrix is filled in *before* an
 | **Density** | dense | spacious | standard |
 | **Motion** | still | interaction-only | physical |
 | **Signature** | the accession rail | the specimen plate | the route map |
+| **Form language** | rule-delimited, sharp | rule-delimited, plate borders | elevation-layered, soft |
 
-**Divergence check:** A vs B differs on 7 of 7. A vs C differs on 7 of 7. B vs C differs on 6 of 7 (both non-dense... no — spacious vs standard differ). Passes.
+**Divergence check:** A vs B differs on 7 of 8 (both rule-delimited). A vs C differs on 8 of 8. B vs C differs on 7 of 8. Passes — the shared rule-delimited treatment between A and B is fine because they diverge nearly everywhere else.
 
 **Theses** — each is an argument about what the product is, and they disagree:
 

@@ -103,7 +103,19 @@ prints the fallback command.
 
 ### References
 
-`archetypes.md`, `copy-gate.md`, `ai-tells.md`, `design-tokens.md`, `favicon-and-head.md`,
+Two are worth calling out beyond the gates above:
+
+- **`conventions.md`** — which conventions are load-bearing (breaking them has a real comprehension
+  cost) versus herd behavior, and where popular design advice stops applying. Departures from that
+  advice are recorded with reasons, so a later edit doesn't silently "fix" a deliberate choice back
+  into a default.
+- **`flows.md`** — everything else in the skill designs *screens*; this designs the path between
+  them. A flow can be built entirely from good screens and still be bad: every step well-spaced,
+  accessible, on-token, and the user still ends up stuck or unable to get back. Those failures are
+  invisible in a screenshot, which is why they survive review. Read it for anything multi-step —
+  sign-up, onboarding, checkout, wizards.
+
+The rest: `archetypes.md`, `copy-gate.md`, `ai-tells.md`, `design-tokens.md`, `favicon-and-head.md`,
 `interface-guidelines.md`, `modes.md`, `motion.md`, `site-architecture.md`, `stack-notes.md`, plus
 `assets/worked-example.md` — a fully filled-in design plan and divergence matrix, so the formats are
 concrete rather than abstract.

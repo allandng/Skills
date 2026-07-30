@@ -237,7 +237,42 @@ def rule_background_report(text: str) -> tuple[list, list]:
     return [], [f"{len(vals)} distinct surface background(s)"]
 
 
-FILE_RULES = [rule_route_collapse, rule_background_report]
+RADIUS_VAL = re.compile(r"border-radius:\s*([\d.]+)(px|rem|em)", re.I)
+BORDER_DECL_RE = re.compile(r"border(?:-top|-right|-bottom|-left)?:\s*[^;}]*solid", re.I)
+SHADOW_RE = re.compile(r"box-shadow:\s*(?!none)[^;}]+", re.I)
+RAMP_PROP = re.compile(r"--[\w-]+-(100|200|300|400|500|600|700)\s*:")
+
+
+def rule_sharp_by_default(text: str) -> tuple[list, list]:
+    """
+    The mirror of the rounded-2xl+shadow-lg tell. Heavy solid borders with no
+    radius above 2px, no shadows, and no ramp tokens is border-delimited by
+    absence rather than by decision — the most common shape of a design that
+    fled the soft tells. Sharp chosen on purpose (rule-delimited editorial,
+    an instrument) will normally carry ramps or a declared form language and
+    stays unflagged.
+    """
+    css = " ".join(re.findall(r"<style[^>]*>(.*?)</style>", text, re.S | re.I)) or text
+    borders = len(BORDER_DECL_RE.findall(css))
+    radii = [float(v) * (16 if u in ("rem", "em") else 1)
+             for v, u in RADIUS_VAL.findall(css)]
+    max_radius = max(radii, default=0)
+    shadows = len(SHADOW_RE.findall(css))
+    ramps = len(set(RAMP_PROP.findall(css)))
+    # shadows weighed against border reliance: a couple of focus rings on a
+    # border-built page do not make it elevation-layered
+    if borders >= 8 and max_radius <= 2 and ramps == 0 and shadows * 3 < borders:
+        return [(
+            "sharp-by-default", "med",
+            f"{borders} solid borders, max radius {max_radius:g}px, 0 shadows, "
+            "0 ramp tokens - border-delimited by absence, not decision. Fine "
+            "if the plan declared rule- or border-delimited form; otherwise "
+            "this is the mirror tell of rounded-2xl+shadow-lg. See "
+            "design-tokens.md, Form language.")], []
+    return [], []
+
+
+FILE_RULES = [rule_route_collapse, rule_background_report, rule_sharp_by_default]
 
 SEV_ORDER = {"low": 0, "med": 1, "high": 2}
 COLOR = {"high": "\033[31m", "med": "\033[33m", "low": "\033[36m"}

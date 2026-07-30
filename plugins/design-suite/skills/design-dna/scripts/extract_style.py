@@ -447,6 +447,36 @@ def infer_axes(d: dict, palette: dict) -> dict:
     return ax
 
 
+TW_DEFAULT_HEXES = {
+    "#6366f1", "#4f46e5", "#3b82f6", "#2563eb", "#0ea5e9", "#8b5cf6",
+    "#64748b", "#94a3b8", "#cbd5e1", "#f8fafc", "#f1f5f9", "#1e293b",
+    "#0f172a", "#ef4444", "#22c55e", "#f59e0b", "#10b981",
+}
+
+
+def detect_frameworks(props: dict[str, str], hexes: set[str]) -> list[str]:
+    """
+    Off-the-shelf design-system fingerprints. Extraction still describes what
+    renders, but stock tokens are a purchased suit, not a tailored one - the
+    profile should say so instead of presenting Bootstrap's palette as the
+    site's own identity.
+    """
+    out = []
+    keys = set(props)
+    if any(k.startswith("--bs-") for k in keys):
+        out.append("Bootstrap (--bs-* custom properties)")
+    if any(k.startswith(("--mdc-", "--md-sys-")) for k in keys):
+        out.append("Material (MDC / M3 tokens)")
+    if any(k.startswith(("--colorNeutral", "--fluent")) for k in keys):
+        out.append("Fluent UI (v9 token names)")
+    if {"--background", "--foreground", "--muted", "--card"} <= keys:
+        out.append("shadcn/ui token layer (--background/--foreground/--muted/--card)")
+    tw = hexes & TW_DEFAULT_HEXES
+    if len(tw) >= 3:
+        out.append(f"Tailwind default palette ({len(tw)} stock hexes, e.g. {sorted(tw)[0]})")
+    return out
+
+
 def flag_tells(palette: dict, d: dict) -> list[str]:
     out = []
     for role, hx in palette.items():
@@ -508,7 +538,7 @@ def load_paths(paths: list[Path]) -> tuple[str, str]:
 # -------------------------------------------------------------------- report
 
 def write_report(name: str, palette: dict, d: dict, axes: dict,
-                 tells: list[str]) -> str:
+                 tells: list[str], fingerprints: list[str] | None = None) -> str:
     L = [f"# Design DNA: {name}", ""]
 
     L += ["## Palette", "", "| role | hex | luminance | temperature |",
@@ -573,6 +603,16 @@ def write_report(name: str, palette: dict, d: dict, axes: dict,
         L.append(f"| {k.replace('_', ' ')} | {v} |")
     L.append("")
 
+    if fingerprints:
+        L += ["## Framework fingerprints", ""]
+        L += [f"- {f}" for f in fingerprints]
+        L += ["", "These tokens are an off-the-shelf system, not this site's own "
+              "identity. The extraction above describes what renders, but "
+              "style-naming should say 'stock <framework>' rather than treating "
+              "the framework's choices as the site's — and any differentiation "
+              "analysis should look past them to what, if anything, was "
+              "customized.", ""]
+
     L += ["## AI tells present", ""]
     if tells:
         L += [f"- {t}" for t in tells]
@@ -631,7 +671,9 @@ def main() -> int:
     css = light_css
 
     counts = harvest_colors(css + "\n" + html)
-    palette = classify_palette(counts, gather(html, css)['custom_props'], css)
+    props_all = gather(html, css)["custom_props"]
+    palette = classify_palette(counts, props_all, css)
+    fingerprints = detect_frameworks(props_all, set(counts))
     dark_palette = {}
     if has_dark:
         dcounts = harvest_colors(dark_css)
@@ -645,6 +687,7 @@ def main() -> int:
     if args.json:
         print(json.dumps({"name": name, "palette": palette,
                           "dark_palette": dark_palette, "axes": axes,
+                          "framework_fingerprints": fingerprints,
                           "tells": tells, "raw": d,
                           "color_frequency": counts.most_common(24)}, indent=2))
         return 0
@@ -654,7 +697,8 @@ def main() -> int:
     (out / "tokens.json").write_text(json.dumps(palette, indent=2))
     if dark_palette:
         (out / "tokens-dark.json").write_text(json.dumps(dark_palette, indent=2))
-    (out / "profile.md").write_text(write_report(name, palette, d, axes, tells))
+    (out / "profile.md").write_text(
+        write_report(name, palette, d, axes, tells, fingerprints))
     (out / "raw.json").write_text(json.dumps(
         {"axes": axes, "raw": d, "color_frequency": counts.most_common(40)}, indent=2))
 
@@ -664,6 +708,8 @@ def main() -> int:
     print(f"  {len(d['spacing'])} spacing values, {d['shadow_levels']} shadow levels")
     if tells:
         print(f"  {len(tells)} AI tell(s) flagged")
+    for f in fingerprints:
+        print(f"  stock framework: {f}")
     if dark_palette:
         print(f"  dark theme: {len(dark_palette)} roles -> tokens-dark.json")
     print(f"\nWrote {out}/tokens.json, {out}/profile.md, {out}/raw.json")

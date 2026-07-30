@@ -40,6 +40,7 @@ that produces the `GAPS` list, and that list is what `update` mode depends on.
 |---|---|
 | `scripts/extract_style.py` | Pulls a design system out of a site's HTML and CSS into `tokens.json` |
 | `scripts/contrast.py` | WCAG 2.2 contrast ratios across every foreground/background pair in a palette |
+| `scripts/craft_check.py` | Measures the positive craft floor — type scale range, ramps, elevation. The counterpart to a tell scan |
 
 Run the contrast check before you treat an extracted palette as usable — inheriting someone else's
 accessibility failures is a real risk when you're matching a style:
@@ -95,6 +96,7 @@ Two checks run before aesthetics, and they're the reason this skill is more than
 |---|---|
 | `scripts/ai_tells.py` | Scans frontend source for mechanical AI-design tells — colors, fonts, class patterns, copy |
 | `scripts/contrast.py` | WCAG 2.2 contrast across the palette (same checker as `design-dna`) |
+| `scripts/craft_check.py` | Measures the positive craft floor (same checker as `design-dna`) |
 | `scripts/favicon.py` | Turns a designed SVG mark into `favicon.svg` with an embedded dark-mode variant, `icon-mono.svg` for pinned tabs, `site.webmanifest`, and a paste-ready head snippet |
 
 `favicon.py` optionally uses `cairosvg`/`rsvg-convert` to rasterize PNGs and `Pillow` for a 16px
@@ -103,7 +105,7 @@ prints the fallback command.
 
 ### References
 
-Two are worth calling out beyond the gates above:
+Three are worth calling out beyond the gates above:
 
 - **`conventions.md`** — which conventions are load-bearing (breaking them has a real comprehension
   cost) versus herd behavior, and where popular design advice stops applying. Departures from that
@@ -114,6 +116,10 @@ Two are worth calling out beyond the gates above:
   accessible, on-token, and the user still ends up stuck or unable to get back. Those failures are
   invisible in a screenshot, which is why they survive review. Read it for anything multi-step —
   sign-up, onboarding, checkout, wizards.
+- **`adjustments.md`** — "make it softer," "too blocky," "bolder," "quieter." These arrive constantly
+  once a design exists, and none of them is a mode; re-running remix for one is using a crane to move
+  a chair. This is the playbook for amplitude changes to a design that stays, in the system's own
+  vocabulary rather than by bolting on new effects.
 
 The rest: `archetypes.md`, `copy-gate.md`, `ai-tells.md`, `design-tokens.md`, `favicon-and-head.md`,
 `interface-guidelines.md`, `modes.md`, `motion.md`, `site-architecture.md`, `stack-notes.md`, plus

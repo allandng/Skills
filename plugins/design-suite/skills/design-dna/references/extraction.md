@@ -44,6 +44,9 @@ Append to the generated `profile.md`:
 SIGNATURE     what you remember after two seconds, or "none"
 TYPE ROLES    display / body / utility, and where each is used
 COLOR ROLES   what each extracted color is actually FOR
+FRAMEWORK     bespoke | stock <name> | stock-with-overrides — start from the
+              script's fingerprint report, verify by eye which parts were
+              actually customized
 DEAD TOKENS   declared but unused
 GRID          real | approximate | absent; where broken and whether deliberate
 STATES        which exist, which are missing, which are inconsistent

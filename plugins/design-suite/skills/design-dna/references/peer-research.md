@@ -61,10 +61,13 @@ Build this. It is the deliverable.
 | layout system | | | | | | |
 | signature element | | | | | | |
 | named style | | | | | | |
+| framework fingerprint | | | | | | |
 
 ## Reading it
 
 Then answer four questions, in writing:
+
+**0. What is everyone building on?** The fingerprint row first: if several peers share a stock system — the same shadcn token layer, the same Tailwind defaults, stock Material — that is herd behavior at the *infrastructure* level, and it is the cheapest differentiation in the whole table. Looking bespoke in a category of stock frameworks costs one real design decision.
 
 **1. What is unanimous?** Any row where all six agree is either convention or herd behavior. Separate them by asking what breaking it would actually cost the user. If the answer is "nothing, it would just look different" — that is herd behavior, and it is available.
 

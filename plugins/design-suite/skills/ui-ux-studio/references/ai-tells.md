@@ -69,6 +69,7 @@ Set numbers with `font-variant-numeric: tabular-nums` in any column or compariso
 | Decorative bento | Bento grid where the content is homogeneous, so the varied cell sizes encode nothing |
 | **Background band alternation** | Every section gets a different background — white, then gray-50, then white, then dark, then tinted — to fake structure. Real hierarchy comes from type, space, and scale; band colour is what gets reached for when those are absent |
 | **Route collapse** | A multi-page site rendered as one enormous scroll, with the nav reduced to `#anchors`. Usually a symptom rather than a choice, and it is what forces the band alternation above |
+| **Orphan grid cell** | An item count the column count doesn't divide — three cards in a two-column grid — leaving a hole. Either promote the remainder deliberately (a featured card, one size up) or change the column count. The featured treatment is usually better: it converts a packing bug into hierarchy |
 | Uniform `py-24` | Every section vertically padded identically, so hierarchy has no rhythm |
 | Centered everything | `max-w-7xl mx-auto` on every section, zero asymmetry, no full-bleed, no grid breaks |
 | `rounded-2xl` + `shadow-lg` | Every surface the same radius, same elevation, same border |

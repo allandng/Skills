@@ -46,6 +46,10 @@ For the chosen archetype:
 3. **Load-bearing conventions.** Which category conventions genuinely help, and which are herd behavior. Users looking for a meeting time expect to find it near the top; that convention is load-bearing. A hero with a big claim and two buttons is not.
 4. **Scale honesty.** How big, old, and busy is this thing *actually*? Write the numbers down. Twelve members. Three projects. Three meetings held. Zero scheduled. Then check every design decision against them.
 
+### Quiet constraints override aesthetics
+
+Some audiences carry constraints that outrank every aesthetic preference, the brief's included: public-sector and government services, regulated industries (finance, health, legal), products for children, and audiences where accessibility is first-order rather than a floor. For these, restraint is not a style choice — experimental layout, ambient motion, and low-contrast subtlety are risks, and the boring option is frequently the correct one. Name the quiet constraint in the classification when one exists, so a later step doesn't trade it away for distinctiveness.
+
 ## Step 3 — The scale-honesty test
 
 Ask directly: **does this design imply more weight, activity, or permanence than the subject has?**

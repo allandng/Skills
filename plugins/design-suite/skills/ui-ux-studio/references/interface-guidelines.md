@@ -40,7 +40,7 @@ When time is short, work down this list. Items 1–3 are non-negotiable; 4–7 s
 - `touch-action: manipulation` to kill the 300ms double-tap-zoom delay.
 - `overscroll-behavior: contain` on modals, drawers, and sheets.
 - Set `-webkit-tap-highlight-color` deliberately.
-- Press feedback within 80–150ms — opacity, color, or elevation. Never a layout-shifting transform.
+- Press feedback within 80–160ms. The reliable idiom: `transform: scale(0.97)` on `:active` with `transition: transform 160ms ease-out` — subtle (0.95–0.98), on any pressable element. Opacity or color shifts also work; never a layout-shifting property.
 - Never disable zoom: `user-scalable=no` and `maximum-scale=1` are accessibility failures.
 - During drag, disable text selection and mark dragged elements `inert`.
 - `autoFocus` sparingly: desktop only, one clear primary input, never on mobile.

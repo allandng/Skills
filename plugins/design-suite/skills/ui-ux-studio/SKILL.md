@@ -18,10 +18,13 @@ Read the request and pick one. If two apply, run them in the order listed.
 | **create** | New page, screen, component, or product from a brief or description | One design plan, then one built implementation |
 | **remix** | An existing site/app plus "give me options", "redesign", "3 versions", "this looks AI-generated" | Three orthogonal directions, same content, built side by side |
 | **spec-to-ui** | A backend, schema, API, type file, architecture doc, or PRD with no UI yet | An interface inventory, then three distinct interaction models |
+| **variants** | A settled design plus "different colors/fonts/layout", "more like this one", "same but professional variations" | Three treatments of one design — same concept, different surface |
 | **update** | An existing site plus "add a", "extend", "new page/section/component", "in the same style" | New work that is indistinguishable from what was already there |
 | **audit** | Existing UI plus "review", "audit", "make it more polished", "what's wrong with this" | Findings by severity, then a three-phase fix plan |
 
-`references/modes.md` has the full playbook for **remix**, **spec-to-ui**, **update**, and **audit**. Read it when you enter one of those modes — do not improvise them from this table. **create** is specified below in full.
+**remix or variants?** Remix produces competing *arguments* about what the product is; variants produces competing *treatments* of one settled answer. If the user likes one previous option and wants more like it — or keeps getting one good result and two strange ones — the mode is variants. Conceptual divergence is what makes the other two strange.
+
+`references/modes.md` has the full playbook for **remix**, **spec-to-ui**, **variants**, **update**, and **audit**. Read it when you enter one of those modes — do not improvise them from this table. **create** is specified below in full.
 
 ## The non-negotiables
 
@@ -70,10 +73,19 @@ ARCHETYPE   the category, and what it borrows if hybrid
 SCALE       the real numbers — members, items, age, activity
 SUBJECT     one sentence — what and for whom
 THESIS      the one idea the design is arguing, and why this archetype supports it
-PALETTE     4-6 named hex values, each with a role and a reason
-            (surface, ink, primary, accent, and one you had to justify)
+PALETTE     surface, surface-raised, ink, ink-muted, border, plus 1-2 chroma
+            colors — each with a role and a reason.
+            Every chroma color gets a 3-5 step RAMP (100/300/500/700), because
+            a flat one-hex-per-role palette can only fill at full strength and
+            forces every separation to be a border. Name the ramp steps.
+FORM        boundary treatment — border-delimited | rule-delimited |
+            elevation-layered | tint-layered — plus radius personality
+            (sharp 0-2 | soft 4-8 | round 12-16 | pill) and elevation levels.
+            Pick one treatment and say why the subject implies it.
 TYPE        display face / body face / utility face, with the pairing rationale
-            plus the scale: 5-7 steps with actual values
+            plus the scale: 5-7 steps with actual values, and the RANGE —
+            largest over body should be 3.5-6x on any page with a focal
+            element. Under 2.5x nothing dominates and the page reads flat.
 LAYOUT      one-sentence concept + an ASCII wireframe
 DENSITY     spacious | standard | dense, and the spacing scale that follows
 MOTION      the philosophy in one sentence, and where it appears
@@ -87,6 +99,8 @@ Read `references/design-tokens.md` for how to build the palette and type scale s
 ### Step 3 — Critique the plan before writing code
 
 Ask, honestly: if you were handed a *different* brief in the same category, would you have produced roughly this plan? Mentally run that other brief. Where the answers converge, that part of the plan is a default wearing a costume — revise it and say what changed and why.
+
+Check the derivation well. "The subject's world" reaches most easily for *documents and instruments* — ledgers, labels, registers, benches, sheets — and those artifacts are paper and metal: ruled, stamped, sharp. That well is real but it is not the whole world. A subject's world also includes its **light, its soft materials (skin, fabric, food, plants, water, upholstery), its sounds and pace, and the digital-native surfaces it already lives on** — none of which have a paper artifact, all of which derive soft. If this plan's concept is *again* a print or instrument metaphor, and the last few were too, the well has become the default: draw from a different part of the subject's world before proceeding.
 
 Then run the scale-honesty test from `archetypes.md` §3: does this plan imply more weight, activity, or permanence than the subject has? An archive aesthetic for a two-year-old club with three entries, or a live status board for something with no live state, fails here — and failing means going back to the concept, not restyling it.
 
@@ -115,9 +129,14 @@ python3 scripts/favicon.py --svg mark.svg --name "Product Name" \
 ### Step 6 — Self-critique
 
 ```bash
-python3 scripts/ai_tells.py <files>        # design tells
+python3 scripts/ai_tells.py <files>                # what makes it look machine-made
+python3 scripts/craft_check.py <files>             # whether it has visual authority
 python3 scripts/contrast.py --tokens tokens.json   # WCAG contrast on the palette
 ```
+
+`ai_tells.py` and `craft_check.py` measure opposite failures and both matter. A page can scan clean of every tell and still be forgettable — that is the *safe* failure, and it is the one to watch for, because avoiding tells pulls toward restraint and restraint taken far enough is just absence. If the craft floor fails, the fix is in the plan, not the CSS.
+
+If `craft_check.py` reports low scale contrast or zero ramps, do not patch the CSS — those are plan failures. Go back to Step 2, give the chroma colors real ramps, and set a display step that actually dominates.
 
 Then look at it with fresh eyes. Take a screenshot if the environment allows — a picture catches what reading the code does not.
 
@@ -147,6 +166,7 @@ State assumptions inline rather than stopping to ask, unless a genuine fork woul
 | `references/modes.md` | Entering remix, spec-to-ui, or audit mode |
 | `references/design-tokens.md` | Building a palette, type scale, or spacing system |
 | `references/interface-guidelines.md` | Writing any interface code; auditing any interface |
+| `references/adjustments.md` | "Make it softer / bolder / quieter / sharper" — amplitude changes to a design that stays |
 | `references/flows.md` | Anything with more than one step — sign-up, onboarding, checkout, wizards, multi-step forms |
 | `references/motion.md` | The design involves animation or transitions |
 | `references/favicon-and-head.md` | Any output that is a page — favicon, title, meta, technical SEO |
@@ -157,10 +177,11 @@ Companion skill: `design-dna` extracts tokens and style profiles from real websi
 
 | Script | Does |
 |---|---|
-| `scripts/ai_tells.py` | Scans CSS/HTML/JSX/TSX for the concrete AI-design tells |
+| `scripts/ai_tells.py` | Scans for concrete AI-design tells — the negative filter |
+| `scripts/craft_check.py` | Measures the positive craft floor: scale contrast, ramps, form language, surface layering |
 | `scripts/contrast.py` | WCAG 2.2 contrast ratios across a token palette, all pairs |
 | `scripts/favicon.py` | Emits favicon.svg + dark variant + maskable + manifest + head block |
 
 ## Provenance
 
-Synthesized from Vercel's Web Interface Guidelines and React/composition skills, Anthropic's `frontend-design` skill, the `ui-ux-pro-max` priority model, Bencium's design-audit reduction filter, AccessLint's WCAG 2.2 audit flow, and the landing-page generator's style taxonomy. The AI-tell catalogue and the divergence matrix in `modes.md` are original to this skill.
+Synthesized from Vercel's Web Interface Guidelines and React/composition skills, Anthropic's `frontend-design` skill, the `ui-ux-pro-max` priority model, Bencium's design-audit reduction filter, AccessLint's WCAG 2.2 audit flow, and the landing-page generator's style taxonomy. Motion standards in `motion.md` additionally distill Emil Kowalski's animation philosophy (frequency gating, easing discipline, physicality rules); the adjustment verbs in `adjustments.md` and the soft-execution recipes in `design-tokens.md` distill Paul Bakaus's impeccable. The AI-tell catalogue and the divergence matrix in `modes.md` are original to this skill.

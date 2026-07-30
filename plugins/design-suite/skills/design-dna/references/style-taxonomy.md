@@ -117,6 +117,22 @@ Cream ground, high-contrast serif display, terracotta accent, generous whitespac
 
 ---
 
+## Translating vibe words
+
+Clients and briefs rarely speak in taxonomy names. They say "Linear-style," "Apple-y," "make it premium." **A vibe word is a compressed reference to sites the person has seen — decompress it into real sites and extract those**, rather than designing from the adjective. That is this skill's whole move: vocabulary → reference sites → extraction.
+
+| They say | They usually mean | Do |
+|---|---|---|
+| "Linear-style", "clean like Linear" | Restraint, dark-capable, keyboard-fast, tight type | Extract linear.app itself; corporate systematic / dark technical hybrid |
+| "Apple-y", "premium consumer" | Spacious, large type, product photography carrying the page | Extract the actual product pages they mean; premium ≠ a style, it's restraint + budget for imagery |
+| "brutalist" | Almost always **neo**brutalism (thick borders, offset shadows, flat brights) — not true raw brutalism | Confirm with one reference before committing; the two families read completely differently |
+| "Awwwards", "experimental" | Kinetic / motion-led, scroll-driven | Extract 2–3 of the actual award pages; budget honestly — this family is execution-expensive |
+| "glassy" | Glassmorphism | Warn per the taxonomy entry: the material must mean something or it becomes the uniform-glass tell |
+| "minimal", "clean" | Underdetermined — could be Swiss, Japandi, corporate systematic, or book | Do not guess; ask for one site they're picturing, or extract their nearest competitor |
+| "premium", "luxury" | Spacious + restrained + either a serif with provenance or a tight grotesque | Ask for a reference; "premium" is the least informative word in the vocabulary |
+
+When no reference site can be pried loose, fall back to the archetype's world (`ui-ux-studio`'s derivation) rather than to a family picked from this table — the table decodes vocabulary, it does not replace derivation.
+
 ## Reading a style off a site
 
 Run `extract_style.py`, then work down this list. Each row maps an extracted value to the styles it is consistent with.

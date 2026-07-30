@@ -6,6 +6,10 @@ Condensed from Vercel's React best-practices and composition-patterns skills.
 
 ---
 
+## When an official design system exists
+
+If the brief reads as a specific platform's world — Microsoft-flavored enterprise, Material-flavored product, GOV.UK or USWDS public services — reach for the official package (`@fluentui/react-components`, `@material/web`, the gov frameworks) instead of hand-rolling tokens. Do not invent CSS for things that ship as maintained systems with accessibility already done; and do not dress a hand-rolled theme up as one of these systems, which reads as counterfeit to anyone who knows them. In update mode the platform's system *is* the house system and the seam test applies against it.
+
 ## Component architecture
 
 The highest-leverage rule: **avoid boolean prop proliferation.** A component that grows `isCompact`, `hasIcon`, `showFooter`, `isBordered` has stopped being a component and become a configuration format. Each boolean doubles the state space and none of them compose.

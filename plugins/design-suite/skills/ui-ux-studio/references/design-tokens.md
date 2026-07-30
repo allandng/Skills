@@ -131,6 +131,17 @@ Mixing treatments on one surface — a bordered card *with* a shadow *with* a ti
 - **Radius scales with the container.** A large card carries a larger radius than the button inside it; derive it (`calc(var(--radius-lg) * 1.15)`) rather than inventing a new stop.
 - **Nested corners share a center:** inner radius ≈ outer radius minus the padding between them. An inner element with its container's exact radius looks subtly wrong at the corners.
 
+### Executing soft without tripping the tells
+
+Sharp has abundant case law; soft fails most often at execution, not intent. The concrete recipes (several distilled from Paul Bakaus's *impeccable*):
+
+- **Shadows are two layers and never pure black.** `0 1px 2px` at ~6% plus `0 8px 24px` at ~8%, tinted with the ink or surface hue. A single hard black shadow is what makes "soft" read as a gray box with a smudge.
+- **Large fills at 70–85% saturation.** Full-chroma backgrounds shout; the ramp's 100–300 steps exist so big areas can be quiet while small marks stay vivid.
+- **Tinted neutrals, never pure gray** — and **never gray text on a colored fill**: use a darker step of that fill's own ramp, or drop opacity of the fill, not the text.
+- **Hover ladders climb the ramp:** rest at 100, hover at 200, active at 300. One family, three steps — not three unrelated colors.
+- **Gradients earn their place** only between two adjacent ramp steps of one hue, or two analogous hues at matched lightness. Anything wider is the template gradient.
+- **Quiet without intent collapses to generic.** Soft is not the absence of decisions; it is decisions made at lower amplitude. The signature element still exists and still dominates — see the Bramble plan in `assets/worked-example.md` for the whole system in use.
+
 **Elevation:** three levels maximum — flat, raised, overlay. Every card at `shadow-lg` means no card is elevated. The non-tell hover idiom is a small lift — `translateY(-2px)` plus one shadow step — not `scale()`.
 
 ## Motion tokens
@@ -142,6 +153,7 @@ Mixing treatments on one surface — a bordered card *with* a shadow *with* a ti
 --duration-slow:    400ms   /* entrances, layout */
 --ease-out:  cubic-bezier(0.16, 1, 0.3, 1)
 --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1)
+--ease-drawer: cubic-bezier(0.32, 0.72, 0, 1)  /* sheets and drawers */
 ```
 
 ## Token file shape

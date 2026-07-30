@@ -207,7 +207,14 @@ RISK LEVEL          how far it is from the current site
 
 Then a short recommendation with a reason. Presenting three options with no opinion pushes the work back onto the user.
 
-Finish with a scan of all three: `python3 scripts/ai_tells.py <all files>`.
+Finish with both scans across all three:
+
+```bash
+python3 scripts/ai_tells.py <all files>      # negative filter
+python3 scripts/craft_check.py <each direction>   # positive floor
+```
+
+A direction that clears the tells but fails the craft floor is the *safe* failure — inoffensive and forgettable. It is not shippable as a design option, because presenting three restrained directions gives the user no real choice.
 
 ---
 
@@ -301,6 +308,103 @@ Every screen ships its empty, loading, and error states. Those states are where 
 Same presentation shape as remix Step 7, plus for each model:
 - The backend work it implies
 - How it degrades as data volume grows 100×
+
+---
+
+# Mode: variants
+
+Several treatments of **one** design. Same concept, same content, same structure — different palette, type, form language, and arrangement. All professional, all good, none of them the odd one out.
+
+## How this differs from remix
+
+These get confused constantly, and picking wrong produces exactly the wrong output.
+
+| | remix | variants |
+|---|---|---|
+| Produces | three *arguments* about what the product is | three *treatments* of one settled design |
+| Thesis | different per direction | **identical across all** |
+| Concept | diverges deliberately | fixed |
+| Layout skeleton | can differ entirely | same bones, different arrangement |
+| Feels like | "should we be an instrument or a publication?" | "same site, which palette and type?" |
+| Right when | direction is genuinely unsettled | direction is settled, surface is not |
+
+**The tell that you want variants, not remix:** the user likes one of the existing options and wants more like it. Or they describe the goal as "different colors, fonts, layout" rather than "different ideas." Or — most reliably — every remix round produces one they like and two they find strange. Conceptual divergence is what makes the other two strange; if that is happening, stop diverging.
+
+Remix answers a question. Variants dresses an answer.
+
+## Step 1 — Fix the invariants
+
+Write these down and do not touch them again. Anything on this list moving means you are doing remix by accident.
+
+```
+FIXED ACROSS ALL VARIANTS
+  thesis        the one idea — verbatim, identical in every variant
+  archetype     and its ten-second job
+  content       every string, every image, every number
+  IA            routes, nav, page order, section order
+  signature     the same element carries the identity in each
+  states        the same empty/loading/error coverage
+  features      EVERYTHING THE SITE DOES — theme toggle, auth/login,
+                interactive widgets, logo and tech-stack imagery,
+                filters, forms. A variant changes how things look,
+                never what exists. Build the feature inventory from
+                the source (site-architecture.md §4 format, but every
+                verdict is KEEP) and carry it into every variant.
+  constraints   the hard-constraint register
+```
+
+A dark/light toggle deserves its own line because it is the most common casualty: it is a *feature* that doubles the palette work, and dropping it silently halves the product. If the source has two themes, every variant ships two themes — each with its own contrast pass — or the plan states the cut and gets approval first.
+
+If the source is an existing design the user likes, extract it first (`design-dna`) — the invariants come out of the real artifact, not from a fresh interpretation of the brief.
+
+## Step 2 — The variation matrix
+
+Vary only the surface. Each variant differs from the others on **all five** rows — this is the opposite of remix's "four of eight," because here the axes are few and every one of them should move.
+
+| Axis | Options |
+|---|---|
+| **Palette** | a different derived source, each with full ramps. Not the same hues rearranged — different temperature, different chroma strategy |
+| **Type pairing** | different display/body/utility families. The pairing category should differ, not just the face |
+| **Form language** | border-delimited / rule-delimited / elevation-layered / tint-layered, each with its own radius personality |
+| **Rhythm** | the spacing scale and section cadence — dense, standard, or spacious within what the archetype tolerates |
+| **Arrangement** | the same content, laid out differently: where the signature sits, what is full-bleed, where the eye enters. The *skeleton* holds; the composition moves — **within the archetype's conventions.** A portfolio arranged as an app shell (persistent sidebar plus top nav) has not varied the arrangement; it has changed the archetype, which is fixed. Check each arrangement against the archetype's cosplay traps before building. |
+
+Arrangement is the one people skip, and skipping it is what makes variants feel like recolors. Same bones does not mean same picture.
+
+## Step 3 — Quality parity
+
+**Every variant must be equally good.** This is the requirement that separates variants from remix, where directions legitimately differ in risk.
+
+- **Feature parity against the source, verified mechanically** — grep each variant for the toggle, the auth entry, the imagery, every interactive element in the inventory. "It looks right" does not catch a missing theme toggle; a checklist does.
+- All clear the craft floor: `python3 scripts/craft_check.py <each variant>`
+- All clear the tell scan
+- All clear contrast, in both themes if there are two
+- **None is the "safe one" and none is the "weird one."** If one variant is obviously the sensible choice, the others are not variants — they are worse versions, and presenting them wastes the user's attention.
+
+The test: could the user ship *any* of them without regret, and is the choice genuinely a matter of taste? If not, rebuild the weak one rather than presenting it.
+
+## Step 4 — Build
+
+Same content, same routes, same functionality, one directory per variant. Name by treatment, not by number or by concept — `slate-grotesque/`, `warm-serif/`, `tinted-mono/`. The name should say what the treatment *is*, since that is the only thing that differs.
+
+Three is usually right. Four is fine. Five is a menu, and menus produce paralysis rather than decisions.
+
+## Step 5 — Present
+
+Short, since the differences are visual and the user will look rather than read.
+
+```
+NAME          the treatment, in two or three words
+PALETTE       source and character, one line
+TYPE          the pairing and what it signals
+FORM          treatment and radius personality
+ARRANGEMENT   what moved, and why it suits this palette and type
+BEST WHEN     the one condition that would decide it
+```
+
+No recommendation unless asked. Remix ends with an opinion because the directions make competing claims; variants end without one because taste is the whole question. Offering a "best" here quietly turns a choice into a verdict.
+
+Then: `python3 scripts/craft_check.py` on all of them, and show the numbers side by side. Equal scores are the proof of parity.
 
 ---
 
@@ -489,7 +593,7 @@ Forming an opinion before this is complete produces cosmetic notes instead of st
 | Alignment and grid | Is everything locked to a grid? Anything off by 1–2px? |
 | Components | Identical across screens? All states covered — hover, focus, active, disabled, loading? |
 | Iconography | One set, one weight, one size system? |
-| Motion | Purposeful, interruptible, reduced-motion aware? |
+| Motion | Purposeful, interruptible, reduced-motion aware? Severity follows frequency: an easing bug on a command palette outranks the same bug on a modal, and any animation on a keyboard-initiated action is a finding by itself (`motion.md`) |
 | Empty states | Designed, or broken? Does the user know what to do next? |
 | Loading states | Skeletons matching content shape, or a spinner? |
 | Error states | Do they say what happened *and* the fix? |

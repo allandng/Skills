@@ -1,0 +1,20 @@
+{
+  "name": "askillissue",
+  "displayName": "A Skill Issue",
+  "description": "Engineering-rigor skills for agentic coding: a router with 22 playbooks, 24 principles, and workflow skills for understanding, design, review and shipping. A fork of pstack by Lauren Tan.",
+  "author": {
+    "name": "Allan",
+    "url": "https://github.com/allandng"
+  },
+  "repository": "https://github.com/allandng/Skills",
+  "homepage": "https://github.com/allandng/Skills/tree/main/plugins/askillissue",
+  "license": "MIT",
+  "keywords": [
+    "workflow",
+    "principles",
+    "subagents",
+    "code-review",
+    "verification",
+    "pstack"
+  ]
+}

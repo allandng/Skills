@@ -4,6 +4,26 @@ Extracting one site tells you what that site does. Extracting six tells you what
 
 This is the part that replaces a paid style database, and it is better than one, because a database is a snapshot of what was fashionable when it was compiled, and this is current.
 
+## Sourcing the set
+
+Finding the right peers is the hardest part of a survey, and guessing from memory produces a set skewed toward whatever is famous. Source candidates deliberately, by whichever of these is available:
+
+- **Web search** — always available, and sufficient. "best <category> tools", "<competitor> alternatives", category directories, "site like X" queries. This is the default path.
+- **The user's own knowledge** — they usually know their direct competitors better than any index. Ask.
+- **Mobbin, if the user has the MCP connection** — optional, never required. A curated index of shipped product UI, searchable by screen, section, and flow; when present it is the best tool for the adjacent-category picks. Check the available tools rather than assuming; if it is not connected, do not mention it or suggest connecting it — the web-search path produces a full survey on its own.
+
+```
+search_sections  "pricing page with plan comparison table"
+search_screens   platform=web, "file upload screen with drag and drop zone"
+search_flows     platform=web, "sign up with email verification"
+```
+
+**When Mobbin is present, use it to find out who to look at and what a category actually ships.** It is unusually good at the adjacent-category picks, which are the hardest part of a set and the part that produces non-obvious moves.
+
+**It cannot replace extraction.** Mobbin returns *images*. There is no CSS behind them — no tokens, no ramps, no measured contrast, no framework fingerprint. Sourcing a peer from Mobbin means then visiting the real site and running `extract_style.py` on it. A survey built only from screenshots has no measurements in it and is not a survey; it is a moodboard.
+
+Two further limits: the corpus skews toward apps and funded products, so a survey of student clubs or local businesses will find little; and pass `platform=web` when the subject is a website, since the iOS corpus is larger and will otherwise dominate.
+
 ## Why the comparison set matters
 
 Every visual choice on a site is one of three things:

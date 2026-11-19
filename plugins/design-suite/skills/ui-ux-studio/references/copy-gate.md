@@ -2,7 +2,7 @@
 
 Every string a human reads passes through this before the work ships. Headlines, body copy, button labels, form labels, help text, error messages, empty states, tooltips, alt text, page titles, meta descriptions, and any placeholder or sample content that survives into the deliverable.
 
-The reason this is a gate rather than a guideline: copy is the fastest-read part of an interface and the least protected. A page can survive every visual check and still announce itself on the first line of the hero. In the ORBIT case the concept failure was legible almost entirely through language — "members on the books," "entries are numbered on opening and stamped on delivery," "Status: live" — before anyone looked at the type.
+The reason this is a gate rather than a guideline: copy is the fastest-read part of an interface and the least protected. A page can survive every visual check and still announce itself on the first line of the hero. In the SPARC case the concept failure was legible almost entirely through language — "members on the books," "entries are numbered on opening and stamped on delivery," "Status: live" — before anyone looked at the type.
 
 ## First: decide whether the copy is the asset
 
@@ -108,7 +108,7 @@ Structural patterns to cut:
 
 ## Borrowed-weight language
 
-The specific class that produced the ORBIT failure. This language implies institutional scale, custody, or continuous operation. Check it against the numbers from the archetype's scale-honesty step.
+The specific class that produced the SPARC failure. This language implies institutional scale, custody, or continuous operation. Check it against the numbers from the archetype's scale-honesty step.
 
 **Archive register:** on the books · on record · standing record · accession · register opened · revised [date] · stamped · entries are numbered · of record · custody · holdings
 

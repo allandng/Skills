@@ -67,6 +67,20 @@ Every step in a flow needs the same state coverage a screen does, plus two that 
 - **Resumed** — the user comes back three days later. What do they see?
 - **Blocked** — a prerequisite is missing and cannot be resolved here. Say what is needed and who can provide it, rather than a disabled button with no explanation.
 
+## 5b. Checking a flow against shipped products
+
+Everything above is reasoned from principle. Where a flow decision is genuinely uncertain — how many steps before signup, whether a step can be deferred, what a blocked state looks like — check it against products that already solved it — via web search for teardowns and documentation, or, **if the user has the Mobbin MCP connection** (optional; check the tool list, and proceed without comment when absent):
+
+```
+search_flows   platform=web, "onboarding with team invite step"
+search_flows   platform=web, "checkout with guest option"
+search_screens platform=web, "empty state for a project list with no items"
+```
+
+Three things it answers better than reasoning: **step count** in a real journey, **empty and error states** (which this skill demands constantly and had no reference for), and **whether an escape hatch is actually present** in shipped work or only in advice.
+
+Read it as evidence, not instruction. A pattern in eight products may be load-bearing convention or may be herd behavior — `conventions.md` §1 is how to tell, and the answer changes with archetype. Consumer apps optimize for a stranger's first run; an internal tool used daily has the opposite objective, and importing the consumer pattern is a downgrade.
+
 ## 6. The flow inventory
 
 Produce this alongside the interface inventory in spec-to-ui mode, or before building any multi-step feature:

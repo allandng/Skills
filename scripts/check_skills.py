@@ -7,7 +7,8 @@ For each plugins/*/skills/*/SKILL.md: the frontmatter name matches the folder,
 the description fits the 1024-character limit, and every `references/...`,
 `playbooks/...`, `scripts/...` or `assets/...` path the skill's own Markdown
 names exists in that skill. Also checks that files meant to be identical across
-skills still are, and that the marketplace lists every plugin folder.
+skills still are, that the marketplace lists every plugin folder, and that the
+root README lists every skill.
 
 Standard library only. Python 3.11+.
 """
@@ -63,6 +64,12 @@ def main() -> int:
             for rel in set(PATH.findall(md.read_text(encoding="utf-8"))):
                 if not (skill / rel).exists():
                     failures.append(f"{label}: {md.relative_to(skill)} names {rel}, which does not exist")
+
+    readme = (REPO / "README.md").read_text(encoding="utf-8")
+    for skill_md in sorted(REPO.glob("plugins/*/skills/*/SKILL.md")):
+        name = skill_md.parent.name
+        if f"`{name}`" not in readme and f"`{name.removeprefix('principle-')}`" not in readme:
+            failures.append(f"README.md does not list the skill {name}")
 
     for a, b in TWINS:
         pa, pb = REPO / a, REPO / b

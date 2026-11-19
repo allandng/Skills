@@ -182,6 +182,20 @@ Each is a real, good look for the right brief. The problem is that they appear *
 
 **The correction for a default is not its opposite.** This catalogue flags soft defaults loudly — glass on everything, `rounded-2xl` + `shadow-lg`, hover-scale — because current AI output skews soft. Fleeing those tells into zero radius, flat fills, and hairline borders does not escape the problem; it lands in cluster look #3, which is on this same page. A design that is sharp because soft felt risky is exactly as undesigned as one that is soft by reflex. Sharp, soft, rounded, and pill are all legitimate outcomes of derivation and all illegitimate as reflexes — and `design-tokens.md` (Ramps, Form language) now has the machinery that makes the soft end executable without tripping the tells above: tinted fills instead of uniform glass, layered elevation instead of borders, a derived radius instead of one global `rounded-2xl`.
 
+## 10b. Reference libraries and the gallery trap
+
+Pattern libraries — Mobbin, Dribbble, Awwwards, component showcases — are legitimate **research** and illegitimate **derivation**. The distinction is what you carry away:
+
+| Legitimate | The trap |
+|---|---|
+| "Eight of ten blog indexes put the date above the title" — a convention worth knowing | "This one looked nice, build that" |
+| "Nobody in this category has solved the empty state well" — an opening | Assembling a design from screenshots of five different products |
+| "Real onboarding runs three steps, not seven" — a calibration | Reproducing a specific product's distinctive look |
+
+Browsing a gallery and picking a look is the same mechanism as picking from a preset style menu, and it produces the same result: a design that could belong to any product, chosen because it was *seen* rather than *derived*. It also skips the subject, which is where distinctiveness comes from.
+
+Two hard rules. **Reference libraries inform Phase 2 questions — conventions, states, step counts, what a category ships — never the Phase 1 commitment.** Palette, type pairing, form language, and signature come from the subject, not a screenshot. And **never reproduce a specific product's distinctive look**: a recognizable interface identity belongs to whoever built it. Take the pattern, leave the personality.
+
 ## 11. De-slopping procedure
 
 Given a design plan or a built page:

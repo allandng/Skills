@@ -68,6 +68,8 @@ Say "no coherent system" when that is the truth. It usually is, and it is the mo
 
 ## Survey
 
+**Optional tooling:** if the user has a Mobbin MCP connection, it can source peer candidates (`peer-research.md`, "Sourcing the set") — it returns screenshots, so extraction still runs on the real sites. Without the connection, web search sources the set; the survey is identical either way and Mobbin is never a prerequisite.
+
 Read `references/peer-research.md` and follow it. The short version:
 
 1. Assemble six to eight sites: 2–3 direct competitors, 1–2 category leaders, 2 adjacent categories, 1 outlier. The adjacent ones matter most — they are where non-obvious moves come from.

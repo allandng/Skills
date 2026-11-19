@@ -26,6 +26,20 @@ Read the request and pick one. If two apply, run them in the order listed.
 
 `references/modes.md` has the full playbook for **remix**, **spec-to-ui**, **variants**, **update**, and **audit**. Read it when you enter one of those modes — do not improvise them from this table. **create** is specified below in full.
 
+## The stance
+
+Approach every job as the design lead at a small studio known for giving each client a visual identity that could not be mistaken for anyone else's. The client has already rejected work that felt templated. They are paying for a point of view: deliberate, opinionated choices about palette, typography, form, and layout that are specific to this brief — and one real aesthetic risk you can justify.
+
+**Not taking a risk is a risk.** A design that merely avoids every tell and clears every floor is the safe failure — inoffensive, forgettable, and the most common way this skill's output disappoints. A monochrome palette is the one no color rule can flag; that is not a reason to reach for it. The rules below exist to catch failures on the way out the door, not to draw the work. Commit first. Verify after.
+
+## How to work: commit, then verify
+
+**Phase 1 — Commit.** Read only what shapes the plan: the invoked mode's playbook in `references/modes.md`, Step 0 of `references/archetypes.md`, and `references/design-tokens.md`. Then plan and build with conviction, deriving everything from the subject. Do the exploration in your thinking; show work when it would delight, not before.
+
+**Phase 2 — Verify.** After building, run the machinery: `craft_check.py`, `ai_tells.py`, `contrast.py`, then walk the checklists that apply (`ai-tells.md`, `copy-gate.md`, the constraint register, feature parity). Fix violations without sanding off the conviction — a flagged risk taken on purpose, stated with its reason, is a decision and may stay.
+
+The rest of the reference library is consulted when its trigger arises, not read up front. Pattern libraries (Mobbin via MCP, when the user has it connected) follow the same rule: optional Phase 2 evidence for conventions, flows, and states — never a Phase 1 source, never a prerequisite, and nothing to suggest installing (`ai-tells.md` §10b). Reading everything first produces compliance, and compliance produces gray.
+
 ## The non-negotiables
 
 These hold in every mode.
@@ -158,15 +172,16 @@ State assumptions inline rather than stopping to ask, unless a genuine fork woul
 
 | File | Read it when |
 |---|---|
-| `references/archetypes.md` | Always, first — classify what kind of thing this is before any visual decision |
+| `references/archetypes.md` | Phase 1 — Step 0 classifies before any visual decision |
 | `references/site-architecture.md` | Any existing site, or any output with more than one page — route detection, page-count decision, feature keep/cut, deliverable structure |
-| `references/copy-gate.md` | Always, before shipping — every human-readable string |
-| `references/ai-tells.md` | Always — before building and after. The core of this skill. |
+| `references/copy-gate.md` | Phase 2 — every human-readable string before shipping |
+| `references/ai-tells.md` | Phase 2 — plus a fast mental pass at plan time. The catalogue of what reads machine-made |
 | `references/conventions.md` | Deciding which conventions to keep, where popular design advice applies, and why this skill departs from some of it |
 | `references/modes.md` | Entering remix, spec-to-ui, or audit mode |
 | `references/design-tokens.md` | Building a palette, type scale, or spacing system |
 | `references/interface-guidelines.md` | Writing any interface code; auditing any interface |
 | `references/adjustments.md` | "Make it softer / bolder / quieter / sharper" — amplitude changes to a design that stays |
+| `references/ai-tells.md` §10b | Before using Mobbin or any pattern library — research versus derivation |
 | `references/flows.md` | Anything with more than one step — sign-up, onboarding, checkout, wizards, multi-step forms |
 | `references/motion.md` | The design involves animation or transitions |
 | `references/favicon-and-head.md` | Any output that is a page — favicon, title, meta, technical SEO |

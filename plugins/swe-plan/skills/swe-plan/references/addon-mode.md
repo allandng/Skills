@@ -233,12 +233,20 @@ python scripts/verify_plan.py <plan.md> <path-to-repo>
 
 It pulls every file path and code symbol out of the plan and checks them against the repo, separating what exists, what is marked new, and what is neither. Anything in that last group is either a typo or something you invented. Fix it before the plan goes anywhere - and when a path turns out not to exist, go back and read, rather than swapping in another guess.
 
-Then do a pass by hand for what a script cannot see:
+Then check that the plan agrees with itself:
+
+```bash
+python scripts/check_addon.py <plan.md> <path-to-repo>
+```
+
+It fails when MAY TOUCH lists a file that is not in the VERIFIED ledger, when TOUCHES or a phase reaches outside the fence, when a phase has no check or no undo, when Out of scope is empty, when an option has no failure condition, or when there is no rollback.
+
+Then do a pass by hand for what neither script can see:
 
 - Every claim in the plan's declarative voice traces to a **VERIFIED** ledger entry. Anything from **INFERRED** still carries its hedge.
-- Every path in TOUCHES appears in MAY TOUCH, and the reverse.
 - No step quietly does something on the WILL NOT list.
 - Every `Q-##` that blocks a phase is named in that phase.
+- The one fact the change is safe because of is named in the blast radius, and you checked it against the code.
 
 ### Doc delta
 

@@ -1,4 +1,4 @@
-# Skills
+# askillissue
 
 61 [Claude Agent Skills](https://docs.claude.com/en/docs/claude-code/skills) in three plugins, for planning software, designing interfaces, and writing code with rigor.
 
@@ -7,7 +7,7 @@
 1. Add the marketplace:
 
    ```bash
-   /plugin marketplace add allandng/Skills
+   /plugin marketplace add allandng/askillissue
    ```
 
 2. Install the plugins you want:
@@ -20,7 +20,7 @@
 
 3. Try one. In a project with a frontend, type `audit this UI`. In any repo, type `/askillissue:allan-mode` and a bug to fix.
 
-Installs end in `@allan-skills`, not `@Skills`. The marketplace has its own name so it cannot collide with someone else's.
+Installs end in `@allan-skills`. That is the marketplace's name, and it differs from the repo's name on purpose so it cannot collide with someone else's.
 
 ## Pick a skill
 
@@ -105,7 +105,7 @@ A sixth, `handoff`, packages any of these for `ui-ux-studio`.
 
 ---
 
-## askillissue
+## askillissue (the plugin)
 
 58 skills for doing engineering work with an agent without shipping slop. [Plugin README](plugins/askillissue)
 
@@ -285,4 +285,4 @@ python3 scripts/fork_pstack.py --upstream <cursor/plugins checkout> --check
 
 [MIT](LICENSE). `plugins/askillissue` is MIT under its upstream author's copyright, and its [LICENSE](plugins/askillissue/LICENSE) is reproduced unchanged.
 
-**Next:** run `/plugin marketplace add allandng/Skills`, install `design-suite`, and type `audit this UI`.
+**Next:** run `/plugin marketplace add allandng/askillissue`, install `design-suite`, and type `audit this UI`.

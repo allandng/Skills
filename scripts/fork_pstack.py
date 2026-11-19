@@ -256,8 +256,8 @@ def build_manifest(plugin: str) -> str:
             "A fork of pstack by Lauren Tan."
         ),
         "author": {"name": "Allan", "url": "https://github.com/allandng"},
-        "repository": "https://github.com/allandng/Skills",
-        "homepage": f"https://github.com/allandng/Skills/tree/main/plugins/{plugin}",
+        "repository": "https://github.com/allandng/askillissue",
+        "homepage": f"https://github.com/allandng/askillissue/tree/main/plugins/{plugin}",
         "license": "MIT",
         "keywords": ["workflow", "principles", "subagents", "code-review", "verification", "pstack"],
     }

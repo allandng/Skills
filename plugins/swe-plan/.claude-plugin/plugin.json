@@ -3,8 +3,8 @@
   "displayName": "SWE Plan",
   "description": "Senior-architect planning system: interview to a full PRD/SRD/ERD bundle, or survey a repo and rank an implementation plan.",
   "author": { "name": "Allan", "url": "https://github.com/allandng" },
-  "repository": "https://github.com/allandng/Skills",
-  "homepage": "https://github.com/allandng/Skills/tree/main/plugins/swe-plan",
+  "repository": "https://github.com/allandng/askillissue",
+  "homepage": "https://github.com/allandng/askillissue/tree/main/plugins/swe-plan",
   "license": "MIT",
   "keywords": ["planning", "architecture", "prd", "spec", "documentation", "adr"]
 }

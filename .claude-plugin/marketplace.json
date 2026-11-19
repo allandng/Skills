@@ -10,7 +10,7 @@
       "source": "./plugins/design-suite",
       "description": "Extract a real site or app's design system and structure, then build, remix, or audit interfaces that don't read as AI-generated. Playbooks, an app taxonomy, and proof before done.",
       "author": { "name": "Allan", "url": "https://github.com/allandng" },
-      "repository": "https://github.com/allandng/Skills",
+      "repository": "https://github.com/allandng/askillissue",
       "license": "MIT",
       "category": "design",
       "keywords": ["design-system", "design-tokens", "ui", "ux", "accessibility", "frontend", "mobile", "app-design"]
@@ -21,7 +21,7 @@
       "source": "./plugins/swe-plan",
       "description": "Senior-architect planning system: interview to a full PRD/SRD/ERD bundle, or survey a repo and rank an implementation plan.",
       "author": { "name": "Allan", "url": "https://github.com/allandng" },
-      "repository": "https://github.com/allandng/Skills",
+      "repository": "https://github.com/allandng/askillissue",
       "license": "MIT",
       "category": "development",
       "keywords": ["planning", "architecture", "prd", "spec", "documentation", "adr"]
@@ -32,7 +32,7 @@
       "source": "./plugins/askillissue",
       "description": "Engineering-rigor skills for agentic coding: a router with 22 playbooks, 24 principles, and workflow skills for understanding, design, review and shipping. A fork of pstack by Lauren Tan.",
       "author": { "name": "Allan", "url": "https://github.com/allandng" },
-      "repository": "https://github.com/allandng/Skills",
+      "repository": "https://github.com/allandng/askillissue",
       "license": "MIT",
       "category": "development",
       "keywords": ["workflow", "principles", "subagents", "code-review", "verification", "pstack"]

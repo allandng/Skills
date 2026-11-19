@@ -1,6 +1,6 @@
 ---
 name: ui-ux-studio
-description: End-to-end UI/UX design system for building, remixing, and auditing interfaces that do not read as AI-generated. Four modes — create (new UI from a brief), remix (3 genuinely different directions for an existing site), spec-to-ui (3 interaction models derived from a backend, schema, or PRD), and audit (design + accessibility review with a phased fix plan). Always ships a subject-derived SVG favicon, page title, and head block with any page it produces. Use this skill whenever the user is designing, building, restyling, reviewing, or critiquing any user interface — web, mobile, or desktop. Trigger it even when the request sounds purely technical ("build a dashboard", "make a landing page", "add a settings screen", "wire up this form") or purely aesthetic ("make it look better", "this feels generic", "give me some design options"), and trigger it on any request to make something look less AI-generated, less templated, or more distinctive.
+description: End-to-end UI/UX design system for building, remixing, and auditing interfaces that do not read as AI-generated, for sites and for the product surface of web, mobile, and desktop apps. Works from playbooks: create, remix, variants, update, spec-to-ui, audit, critique, app shell, screen, flow, platform adaptation, design system, prototype, and visual parity. Classifies with an app taxonomy (surface, app type, shell, screens, states, flows) and proves the result before calling it done. Use this skill whenever the user is designing, building, restyling, reviewing, or critiquing any user interface. Trigger it even when the request sounds purely technical ("build a dashboard", "add a settings screen", "make it work on mobile") or purely aesthetic ("make it look better", "this feels generic", "give me some design options"), and on any request to make something look less AI-generated, less templated, or more distinctive.
 ---
 
 # UI/UX Studio
@@ -26,6 +26,23 @@ Read the request and pick one. If two apply, run them in the order listed.
 
 `references/modes.md` has the full playbook for **remix**, **spec-to-ui**, **variants**, **update**, and **audit**. Read it when you enter one of those modes — do not improvise them from this table. **create** is specified below in full.
 
+## Playbooks
+
+Every mode above, and every job below, has a step list in `playbooks/`. Open the one that matches, copy its steps into your todo list as written (or keep the list in your reply when there is no todo tool), and work them in order. A step that does not apply keeps its line with `n/a: <reason>`. Each playbook ends with a **Reply** line that says what the user gets back. The playbook is the order of work; `modes.md` and the other references hold the detail.
+
+| Playbook | Trigger | Output |
+|---|---|---|
+| **app-shell** | A product with several areas and no agreed structure; "people get lost"; any app before its first screen | Classification line, navigation levels, screen inventory, two wireframes |
+| **screen** | One screen in an app: a list, a detail view, a dashboard, settings | The screen in every state its family requires, with a coverage report |
+| **flow** | Anything with more than one step: sign-up, onboarding, checkout, a wizard | Flow inventory, statechart, the steps built and walked four ways |
+| **platform-adapt** | "Make it work on mobile", web to iOS or Android, mobile to desktop | A translation of each element's job to the target surface |
+| **design-system** | Drifted screens, "add dark mode", nine button variants | Token layers, a component inventory, an exceptions list |
+| **critique** | "Review this", "stress test this", a self-critique that found nothing | Findings that reviewers could point at, and a count of the ones dropped |
+| **prototype** | A design decision that arguing will not settle | Throwaway variants behind one switcher, and a recommendation |
+| **visual-parity** | A migration or refactor where the look must not change | A comparison against a baseline, per component |
+
+Not sure which one fits, or the user asks what this skill can do: `references/help.md`.
+
 ## The stance
 
 Approach every job as the design lead at a small studio known for giving each client a visual identity that could not be mistaken for anyone else's. The client has already rejected work that felt templated. They are paying for a point of view: deliberate, opinionated choices about palette, typography, form, and layout that are specific to this brief — and one real aesthetic risk you can justify.
@@ -34,11 +51,11 @@ Approach every job as the design lead at a small studio known for giving each cl
 
 ## How to work: commit, then verify
 
-**Phase 1 — Commit.** Read only what shapes the plan: the invoked mode's playbook in `references/modes.md`, Step 0 of `references/archetypes.md`, and `references/design-tokens.md`. Then plan and build with conviction, deriving everything from the subject. Do the exploration in your thinking; show work when it would delight, not before.
+**Phase 1 — Commit.** Read only what shapes the plan: the matching file in `playbooks/`, the invoked mode's section of `references/modes.md`, Step 0 of `references/archetypes.md`, and `references/design-tokens.md`. For an app surface, add §1 to §5 of `references/app-taxonomy.md`. Then plan and build with conviction, deriving everything from the subject. Do the exploration in your thinking; show work when it would delight, not before.
 
-**Phase 2 — Verify.** After building, run the machinery: `craft_check.py`, `ai_tells.py`, `contrast.py`, then walk the checklists that apply (`ai-tells.md`, `copy-gate.md`, the constraint register, feature parity). Fix violations without sanding off the conviction — a flagged risk taken on purpose, stated with its reason, is a decision and may stay.
+**Phase 2 — Verify.** After building, climb the ladder in `references/proof.md`: look at the rendered result, run `state_coverage.py` for app screens, then `craft_check.py`, `ai_tells.py`, `contrast.py`, then walk the checklists that apply (`ai-tells.md`, `copy-gate.md`, the constraint register, feature parity). Label each claim in the reply measured, observed, inferred, or guess. Fix violations without sanding off the conviction — a flagged risk taken on purpose, stated with its reason, is a decision and may stay.
 
-The rest of the reference library is consulted when its trigger arises, not read up front. Pattern libraries (Mobbin via MCP, when the user has it connected) follow the same rule: optional Phase 2 evidence for conventions, flows, and states — never a Phase 1 source, never a prerequisite, and nothing to suggest installing (`ai-tells.md` §10b). Reading everything first produces compliance, and compliance produces gray.
+The rest of the reference library is consulted when its trigger arises, not read up front. Pattern libraries (Mobbin via MCP, when the user has it connected) follow the same rule: optional Phase 2 evidence for conventions, flows, and states — never a Phase 1 source, never a prerequisite, and nothing to suggest installing (`ai-tells.md` §10b). When Mobbin is connected, the app-surface playbooks treat that lookup as a step, not an option: conventions, states and step counts get checked against shipped products and reported with counts (`app-taxonomy.md` §8). Reading everything first produces compliance, and compliance produces gray.
 
 ## The non-negotiables
 
@@ -54,6 +71,12 @@ These hold in every mode.
 8. **Pass all copy through the gate.** Every human-readable string goes through `references/copy-gate.md` before shipping. Copy is the fastest-read part of an interface and the least protected — a concept failure is usually legible in the first line of the hero before anyone looks at the type.
 9. **Keep the navigational layer conventional.** Logo top-left linking home, nav near the top, footer at the bottom, clickable things looking clickable. These have a real comprehension cost when broken; almost nothing else in the category does. `references/conventions.md` §1 lists the load-bearing set, and §4 covers where popular marketing-page advice stops applying — most of it is written for one archetype and presented as universal.
 10. **Spend boldness once, and spend it where people land.** One signature element carries the identity; everything around it stays disciplined. A page with four bold ideas reads as noise, a page with one reads as a decision — and a signature filed onto an interior route is a signature nobody sees. If the site has more than one page, read `references/site-architecture.md` §4b before deciding where it lives.
+
+11. **Classify the app surface.** When the archetype is an app UI, an internal tool, a utility, or the signed-in half of anything, write the classification line from `references/app-taxonomy.md` before any layout: surface, app type, loop, shell, screens, flows. "Build a dashboard" is not a specification until the loop is named. Platform behavior follows `references/platforms.md`.
+12. **Every state, or a reason.** A screen is every picture it can show. Each screen family has required states (`references/states.md`); each one is built, or marked `n/a` with a reason. Model them as one value, not a set of booleans.
+13. **Done means shown.** Do not call a design finished until it has been looked at, at the real sizes, in each state. If nothing in the session can render it, say so in the first line. `references/proof.md` has the ladder and the reply frame.
+
+When a decision is hard, `references/principles.md` has one rule per situation. Name the principle that changed a decision; skip the ones that changed nothing.
 
 ## Mode: create
 
@@ -172,7 +195,15 @@ State assumptions inline rather than stopping to ask, unless a genuine fork woul
 
 | File | Read it when |
 |---|---|
+| `playbooks/` | Always — the step list for the job in hand |
+| `references/help.md` | The request does not match one job, or the user asks what this can do |
 | `references/archetypes.md` | Phase 1 — Step 0 classifies before any visual decision |
+| `references/app-taxonomy.md` | Phase 1 for any app surface — surface, app type, shell, screen types, regions, states, flows, and how to look a pattern up |
+| `references/platforms.md` | Any app surface, and any move between web, iOS, Android and desktop |
+| `references/states.md` | Building any app screen — required states per family, the state model, the coverage manifest |
+| `references/principles.md` | A decision is hard — one rule per situation |
+| `references/proof.md` | Phase 2 — the ladder, the claim labels, the reply frame, the decision log |
+| `references/critique-panel.md` | Running the critique playbook, or adding an adversarial pass to an audit |
 | `references/site-architecture.md` | Any existing site, or any output with more than one page — route detection, page-count decision, feature keep/cut, deliverable structure |
 | `references/copy-gate.md` | Phase 2 — every human-readable string before shipping |
 | `references/ai-tells.md` | Phase 2 — plus a fast mental pass at plan time. The catalogue of what reads machine-made |
@@ -188,7 +219,7 @@ State assumptions inline rather than stopping to ask, unless a genuine fork woul
 | `references/stack-notes.md` | React, Next.js, or React Native implementation |
 | `assets/worked-example.md` | You want a filled-in design plan and divergence matrix to copy the shape of |
 
-Companion skill: `design-dna` extracts tokens and style profiles from real websites and runs category surveys. Use it upstream of `remix`, `update`, and competitive `create`.
+Companion skill: `design-dna` extracts tokens and style profiles from real websites, runs category surveys, and tears down how an existing app is organized. Use it upstream of `remix`, `update`, `platform-adapt`, `design-system`, and competitive `create`.
 
 | Script | Does |
 |---|---|
@@ -196,7 +227,8 @@ Companion skill: `design-dna` extracts tokens and style profiles from real websi
 | `scripts/craft_check.py` | Measures the positive craft floor: scale contrast, ramps, form language, surface layering |
 | `scripts/contrast.py` | WCAG 2.2 contrast ratios across a token palette, all pairs |
 | `scripts/favicon.py` | Emits favicon.svg + dark variant + maskable + manifest + head block |
+| `scripts/state_coverage.py` | Checks a `states.json` manifest: every required state per screen family has evidence or a stated reason |
 
 ## Provenance
 
-Synthesized from Vercel's Web Interface Guidelines and React/composition skills, Anthropic's `frontend-design` skill, the `ui-ux-pro-max` priority model, Bencium's design-audit reduction filter, AccessLint's WCAG 2.2 audit flow, and the landing-page generator's style taxonomy. Motion standards in `motion.md` additionally distill Emil Kowalski's animation philosophy (frequency gating, easing discipline, physicality rules); the adjustment verbs in `adjustments.md` and the soft-execution recipes in `design-tokens.md` distill Paul Bakaus's impeccable. The AI-tell catalogue and the divergence matrix in `modes.md` are original to this skill.
+Synthesized from Vercel's Web Interface Guidelines and React/composition skills, Anthropic's `frontend-design` skill, the `ui-ux-pro-max` priority model, Bencium's design-audit reduction filter, AccessLint's WCAG 2.2 audit flow, and the landing-page generator's style taxonomy. Motion standards in `motion.md` additionally distill Emil Kowalski's animation philosophy (frequency gating, easing discipline, physicality rules); the adjustment verbs in `adjustments.md` and the soft-execution recipes in `design-tokens.md` distill Paul Bakaus's impeccable. The AI-tell catalogue and the divergence matrix in `modes.md` are original to this skill. The playbook form, the proof-before-done discipline, the critique panel (after `interrogate`), and several rules in `principles.md` are adapted from pstack by Lauren Tan (MIT); the `prototype` and `visual-parity` playbooks follow hers closely.

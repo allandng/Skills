@@ -36,7 +36,7 @@ Open the site and work through this in order. Take screenshots at 375px, 768px, 
 
 ## Recording the result
 
-Append to the generated `profile.md`:
+Append to the generated `profile.md`, below the `Evidence` block from `evidence.md`. End every line except `GAPS` with an evidence label: `[measured]`, `[observed]`, `[inferred]` or `[guess]`. `scripts/dna_check.py` fails a profile with an unlabeled or empty line.
 
 ```
 ## Manual pass

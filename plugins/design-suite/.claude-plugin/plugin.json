@@ -1,10 +1,10 @@
 {
   "name": "design-suite",
   "displayName": "Design Suite",
-  "description": "Extract a real site's design system into tokens, then build or remix interfaces that don't read as AI-generated.",
+  "description": "Extract a real site or app's design system and structure, then build, remix, or audit interfaces that don't read as AI-generated. Playbooks, an app taxonomy, and proof before done.",
   "author": { "name": "Allan", "url": "https://github.com/allandng" },
   "repository": "https://github.com/allandng/Skills",
   "homepage": "https://github.com/allandng/Skills/tree/main/plugins/design-suite",
   "license": "MIT",
-  "keywords": ["design-system", "design-tokens", "ui", "ux", "accessibility", "frontend"]
+  "keywords": ["design-system", "design-tokens", "ui", "ux", "accessibility", "frontend", "mobile", "app-design"]
 }

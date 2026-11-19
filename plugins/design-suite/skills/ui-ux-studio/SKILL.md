@@ -218,6 +218,7 @@ State assumptions inline rather than stopping to ask, unless a genuine fork woul
 | `references/favicon-and-head.md` | Any output that is a page — favicon, title, meta, technical SEO |
 | `references/stack-notes.md` | React, Next.js, or React Native implementation |
 | `assets/worked-example.md` | You want a filled-in design plan and divergence matrix to copy the shape of |
+| `assets/worked-screen.md` | You want the screen playbook run end to end: the state model, the manifest, every rung's real output, and what looking found that the scripts did not |
 
 Companion skill: `design-dna` extracts tokens and style profiles from real websites, runs category surveys, and tears down how an existing app is organized. Use it upstream of `remix`, `update`, `platform-adapt`, `design-system`, and competitive `create`.
 
@@ -227,7 +228,8 @@ Companion skill: `design-dna` extracts tokens and style profiles from real websi
 | `scripts/craft_check.py` | Measures the positive craft floor: scale contrast, ramps, form language, surface layering |
 | `scripts/contrast.py` | WCAG 2.2 contrast ratios across a token palette, all pairs |
 | `scripts/favicon.py` | Emits favicon.svg + dark variant + maskable + manifest + head block |
-| `scripts/state_coverage.py` | Checks a `states.json` manifest: every required state per screen family has evidence or a stated reason |
+| `scripts/state_coverage.py` | Checks a `states.json` manifest: every required state per screen family has evidence or a stated reason. With `--bundle docs/` it also traces screens to the use cases in a `swe-plan` bundle |
+| `scripts/capture.py` | Captures a page at 375, 768 and 1280 wide, per state and in dark, with any installed Chrome, Chromium or Edge - the first rung of the proof ladder |
 
 ## Provenance
 

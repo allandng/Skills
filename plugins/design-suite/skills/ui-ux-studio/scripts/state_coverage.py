@@ -8,6 +8,11 @@ that is not in that file, or is marked n/a without a reason.
     python3 state_coverage.py states.json
     python3 state_coverage.py states.json --root ./apps/web
     python3 state_coverage.py --template collection:table,object:detail
+    python3 state_coverage.py states.json --bundle docs/
+
+With --bundle it also reads a planning bundle (the swe-plan skill's docs/) and
+checks the screens against its use cases: every UC-## in the bundle is covered
+by some screen's "covers" list, and every ID a screen claims to cover exists.
 
 It cannot judge whether a state is well designed. It can show that one was
 never made. Standard library only. Python 3.11+.
@@ -17,6 +22,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -77,7 +83,33 @@ def template(types: list[str]) -> dict:
     return {"root": ".", "screens": screens}
 
 
-def check(manifest_path: Path, root_override: Path | None) -> int:
+def trace(screens: list[dict], bundle: Path) -> int:
+    """Check screens' "covers" lists against the IDs a planning bundle defines."""
+    text = "\n".join(p.read_text(encoding="utf-8", errors="replace") for p in sorted(bundle.rglob("*.md")))
+    known = set(re.findall(r"\b(?:UC|PR|SR)-\d{2,4}\b", text))
+    use_cases = sorted(i for i in known if i.startswith("UC-"))
+    claimed: dict[str, list[str]] = {}
+    for screen in screens:
+        for ident in screen.get("covers") or []:
+            claimed.setdefault(ident, []).append(screen.get("name") or "(unnamed)")
+    failures = 0
+    print(f"\nTrace against {bundle}")
+    for ident in use_cases:
+        if ident in claimed:
+            print(f"  {OK:<5} {ident:<18} {', '.join(claimed[ident])}")
+        else:
+            print(f"  {FAIL:<5} {ident:<18} no screen covers this use case")
+            failures += 1
+    for ident in sorted(set(claimed) - known):
+        print(f"  {FAIL:<5} {ident:<18} claimed by {', '.join(claimed[ident])} but not defined in the bundle")
+        failures += 1
+    if not use_cases:
+        print(f"  {FAIL:<5} the bundle defines no UC-## use cases to trace against")
+        failures += 1
+    return failures
+
+
+def check(manifest_path: Path, root_override: Path | None, bundle: Path | None = None) -> int:
     try:
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as error:
@@ -114,14 +146,17 @@ def check(manifest_path: Path, root_override: Path | None) -> int:
             waived += verdict == NA
 
     total = covered + waived + failures
-    print(f"\n{len(screens)} screen(s), {total} state(s): {covered} shown, {waived} n/a, {failures} missing")
-    return 1 if failures else 0
+    untraced = trace(screens, bundle) if bundle else 0
+    print(f"\n{len(screens)} screen(s), {total} state(s): {covered} shown, {waived} n/a, {failures} missing"
+          + (f", {untraced} trace problem(s)" if bundle else ""))
+    return 1 if failures or untraced else 0
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     parser.add_argument("manifest", nargs="?", type=Path, help="path to states.json")
     parser.add_argument("--root", type=Path, help="resolve evidence paths against this folder")
+    parser.add_argument("--bundle", type=Path, help="a planning bundle (docs/) to trace screens against")
     parser.add_argument("--template", metavar="TYPES",
                         help="print a blank manifest for comma-separated family:type values")
     args = parser.parse_args()
@@ -130,7 +165,9 @@ def main() -> int:
         return 0
     if not args.manifest:
         parser.error("give a manifest path, or --template")
-    return check(args.manifest, args.root.resolve() if args.root else None)
+    if args.bundle and not args.bundle.is_dir():
+        parser.error(f"not a directory: {args.bundle}")
+    return check(args.manifest, args.root.resolve() if args.root else None, args.bundle)
 
 
 if __name__ == "__main__":

@@ -8,7 +8,8 @@
 4. Model the screen's data as one value with one status (`references/states.md` §2). Draw the chart if any state returns to an earlier one.
 5. Design the ready state with real data at real volume. Then first-run, no-results, error, and the rest. They are designed, not appended.
 6. Build. Tokens only. Copy through `references/copy-gate.md`: empty, error and loading strings included.
-7. Fill `states.json` with evidence and run `python3 scripts/state_coverage.py states.json`.
-8. Proof ladder (`references/proof.md`). Content stress and keyboard are the rungs screens fail.
+7. Capture each state: `python3 scripts/capture.py <page> --query state=<name> --name <screen>-<name>`. Open the captures and look. Fix what looking finds before going on.
+8. Fill `states.json` with evidence and run `python3 scripts/state_coverage.py states.json`. If the product has a planning bundle, add each screen's `covers` list and pass `--bundle docs/`.
+9. Proof ladder (`references/proof.md`). Content stress and keyboard are the rungs screens fail. `assets/worked-screen.md` is this playbook run end to end, with what each rung found.
 
 **Reply:** the screen's type, job and primary action, the state model, the coverage output, screenshots or their absence stated plainly, the proof ladder with labels, open decisions.

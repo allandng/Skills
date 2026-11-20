@@ -1,6 +1,6 @@
 # askillissue
 
-61 [Claude Agent Skills](https://docs.claude.com/en/docs/claude-code/skills) in three plugins, for planning software, designing interfaces, and writing code with rigor.
+67 [Claude Agent Skills](https://docs.claude.com/en/docs/claude-code/skills) in four plugins, for planning software, designing interfaces, writing code with rigor, and proving that what shipped worked.
 
 ## Install
 
@@ -16,6 +16,7 @@
    /plugin install swe-plan@allan-skills
    /plugin install design-suite@allan-skills
    /plugin install askillissue@allan-skills
+   /plugin install funnel-vision@allan-skills
    ```
 
 3. Try one. In a project with a frontend, type `audit this UI`. In any repo, type `/askillissue:allan-mode` and a bug to fix.
@@ -27,14 +28,14 @@ Installs end in `@allan-skills`. That is the marketplace's name, and it differs 
 | You want to | Type |
 |---|---|
 | Plan something before building it | `/start` or `/addon` |
-| Learn how an existing site or app is designed | "how is this site designed" |
-| Design, restyle, or audit an interface | "build a settings screen", "audit this UI" |
+| Design, restyle, audit, or study an interface | "build a settings screen", "how is this site designed" |
+| Ship a feature users adopt, or find out if it worked | "frame this feature", "did the launch work" |
 | Do a coding task properly | `/askillissue:allan-mode` and the task |
 | Find the right skill for anything else | `/askillissue:askillissue-help` |
 
 Two rules cover how they start:
 
-- `swe-plan` and `design-suite` load on their own when your request matches. Describe the work.
+- `swe-plan`, `design-suite` and `funnel-vision` load on their own when your request matches. Describe the work.
 - `askillissue` skills run only when you type them, or when `allan-mode` calls them. That keeps 58 skills from competing for every message.
 
 ---
@@ -102,6 +103,70 @@ Both work from playbooks: a short step list per job. You do not type the playboo
 | `compare` | Two systems side by side, axis by axis |
 
 A sixth, `handoff`, packages any of these for `ui-ux-studio`.
+
+---
+
+## funnel-vision
+
+6 skills for product engineering: deciding what to build, building it so it can be measured, and finding out whether it worked. Built with PostHog in mind. [Plugin README](plugins/funnel-vision)
+
+| Skill | What it does |
+|---|---|
+| `product-mode` | The entry point. Routes any product task to one of 21 playbooks across a feature's whole life |
+| `tracking-plan` | Designs and lints the event tracking plan, and finds tracking faults in real events |
+| `product-analytics` | Funnels, retention, and what retained users did early, with a count and an interval on every rate |
+| `experiment` | Sample size before an A/B test, split check during, readout after |
+| `onboarding` | Tears down the path from sign-up to first value and says what to cut |
+
+One more, used before any number leaves your hands: `metric-check`.
+
+### product-mode playbooks
+
+**Before and while building**
+
+| Playbook | What you get |
+|---|---|
+| `frame` | The user's job, non-goals, one success metric, guardrails, the riskiest assumption |
+| `model` | One name per thing, objects and relationships, URLs, permissions, safe migrations |
+| `build-check` | Seven states per view, a friction count, perceived speed, accessibility |
+| `instrument` | Events in the tracking plan, with edge cases walked and tracking verified live |
+| `ship` | A flag, a kill switch, a staged rollout, and three dated reviews |
+
+**Getting users to value**
+
+| Playbook | What you get |
+|---|---|
+| `onboarding` | A teardown, the funnel by platform with waits, and ranked changes to test |
+| `activation` | A definition of "this user got it", from what retained users did early |
+| `acquisition` | Sources ranked by users who stay, not by sign-ups |
+
+**After launch**
+
+| Playbook | What you get |
+|---|---|
+| `launch-watch` | Days 1 to 3: is it healthy, and can the data be trusted |
+| `friction-review` | Weeks 1 to 2: where people stall, and what replays show |
+| `impact-readout` | Day 30 on: did it change retention, or was it novelty |
+| `decide` | Iterate, double down, pivot or roll back, with the evidence recorded |
+| `cleanup` | The flag, the dead code and the dead events removed |
+
+**Find the problem**
+
+| Playbook | What you get |
+|---|---|
+| `diagnose` | Where a metric's change is concentrated: which users, platform, cohort |
+| `funnel-drop` | One leak: where, for whom, and whether it is real or tracking |
+| `retention` | Who stays, who leaves, and when |
+| `engagement` | How existing users get more of the value, with a guardrail |
+
+**Measure and decide**
+
+| Playbook | What you get |
+|---|---|
+| `experiment` | A test planned in advance and read honestly |
+| `metric` | A definition two people would compute the same way |
+| `review` | Reviewers try to break an analysis before it is acted on |
+| `weekly` | The same numbers, the same way, every week |
 
 ---
 
@@ -255,7 +320,7 @@ One rule each. `allan-mode` reads the ones a task needs. Each skill name starts 
 
 ## Requirements
 
-- **`design-suite` and `swe-plan` scripts**: Python 3.11 or newer, standard library only. Nothing to install.
+- **`design-suite`, `swe-plan` and `funnel-vision` scripts**: Python 3.11 or newer, standard library only. Nothing to install.
 - **`askillissue` tools** (`statechart`, `watch-pr`): TypeScript and shell, unchanged from upstream. They need a TypeScript runtime such as Bun.
 - **Optional**: `ui-ux-studio/scripts/favicon.py` rasterizes PNGs if `cairosvg` or `rsvg-convert` is installed. Without them it still writes the SVG files and prints the fallback command.
 
@@ -265,6 +330,7 @@ One rule each. `allan-mode` reads the ones a task needs. Each skill name starts 
 /plugin update design-suite@allan-skills
 /plugin update swe-plan@allan-skills
 /plugin update askillissue@allan-skills
+/plugin update funnel-vision@allan-skills
 ```
 
 No version numbers to bump. Every commit to `main` counts as a new version.

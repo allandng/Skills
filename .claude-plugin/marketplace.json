@@ -1,6 +1,6 @@
 {
   "name": "allan-skills",
-  "description": "Agent Skills for design systems, software planning, and engineering rigor.",
+  "description": "Agent Skills for design systems, software planning, engineering rigor, and product analytics.",
   "owner": { "name": "Allan", "url": "https://github.com/allandng" },
   "metadata": { "pluginRoot": "./plugins" },
   "plugins": [
@@ -36,6 +36,17 @@
       "license": "MIT",
       "category": "development",
       "keywords": ["workflow", "principles", "subagents", "code-review", "verification", "pstack"]
+    },
+    {
+      "name": "think-like-a-prod-engineer",
+      "displayName": "Think Like a Prod Engineer",
+      "source": "./plugins/think-like-a-prod-engineer",
+      "description": "Product-engineering rigor for features users adopt: frame, instrument, ship, then prove whether it worked. Onboarding, activation, funnels, retention, experiments, and tracking QA, with PostHog in mind.",
+      "author": { "name": "Allan", "url": "https://github.com/allandng" },
+      "repository": "https://github.com/allandng/askillissue",
+      "license": "MIT",
+      "category": "analytics",
+      "keywords": ["product-analytics", "onboarding", "activation", "retention", "funnels", "experimentation", "posthog", "growth"]
     }
   ]
 }

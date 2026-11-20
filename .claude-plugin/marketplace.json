@@ -38,9 +38,9 @@
       "keywords": ["workflow", "principles", "subagents", "code-review", "verification", "pstack"]
     },
     {
-      "name": "funnel-vision",
-      "displayName": "Funnel Vision",
-      "source": "./plugins/funnel-vision",
+      "name": "think-like-a-prod-engineer",
+      "displayName": "Think Like a Prod Engineer",
+      "source": "./plugins/think-like-a-prod-engineer",
       "description": "Product-engineering rigor for features users adopt: frame, instrument, ship, then prove whether it worked. Onboarding, activation, funnels, retention, experiments, and tracking QA, with PostHog in mind.",
       "author": { "name": "Allan", "url": "https://github.com/allandng" },
       "repository": "https://github.com/allandng/askillissue",

@@ -16,7 +16,7 @@
    /plugin install swe-plan@allan-skills
    /plugin install design-suite@allan-skills
    /plugin install askillissue@allan-skills
-   /plugin install funnel-vision@allan-skills
+   /plugin install think-like-a-prod-engineer@allan-skills
    ```
 
 3. Try one. In a project with a frontend, type `audit this UI`. In any repo, type `/askillissue:allan-mode` and a bug to fix.
@@ -35,7 +35,7 @@ Installs end in `@allan-skills`. That is the marketplace's name, and it differs 
 
 Two rules cover how they start:
 
-- `swe-plan`, `design-suite` and `funnel-vision` load on their own when your request matches. Describe the work.
+- `swe-plan`, `design-suite` and `think-like-a-prod-engineer` load on their own when your request matches. Describe the work.
 - `askillissue` skills run only when you type them, or when `allan-mode` calls them. That keeps 58 skills from competing for every message.
 
 ---
@@ -106,9 +106,9 @@ A sixth, `handoff`, packages any of these for `ui-ux-studio`.
 
 ---
 
-## funnel-vision
+## think-like-a-prod-engineer
 
-6 skills for product engineering: deciding what to build, building it so it can be measured, and finding out whether it worked. Built with PostHog in mind. [Plugin README](plugins/funnel-vision)
+6 skills for product engineering: deciding what to build, building it so it can be measured, and finding out whether it worked. Built with PostHog in mind. [Plugin README](plugins/think-like-a-prod-engineer)
 
 | Skill | What it does |
 |---|---|
@@ -320,7 +320,7 @@ One rule each. `allan-mode` reads the ones a task needs. Each skill name starts 
 
 ## Requirements
 
-- **`design-suite`, `swe-plan` and `funnel-vision` scripts**: Python 3.11 or newer, standard library only. Nothing to install.
+- **`design-suite`, `swe-plan` and `think-like-a-prod-engineer` scripts**: Python 3.11 or newer, standard library only. Nothing to install.
 - **`askillissue` tools** (`statechart`, `watch-pr`): TypeScript and shell, unchanged from upstream. They need a TypeScript runtime such as Bun.
 - **Optional**: `ui-ux-studio/scripts/favicon.py` rasterizes PNGs if `cairosvg` or `rsvg-convert` is installed. Without them it still writes the SVG files and prints the fallback command.
 
@@ -330,7 +330,7 @@ One rule each. `allan-mode` reads the ones a task needs. Each skill name starts 
 /plugin update design-suite@allan-skills
 /plugin update swe-plan@allan-skills
 /plugin update askillissue@allan-skills
-/plugin update funnel-vision@allan-skills
+/plugin update think-like-a-prod-engineer@allan-skills
 ```
 
 No version numbers to bump. Every commit to `main` counts as a new version.

@@ -1,9 +1,9 @@
-# Funnel Vision
+# Think Like a Prod Engineer
 
 Product-engineering rigor: decide what to build, build it so it can be measured, and find out afterwards whether it worked.
 
 ```bash
-/plugin install funnel-vision@allan-skills
+/plugin install think-like-a-prod-engineer@allan-skills
 ```
 
 It has the shape of an engineering-rigor stack (playbooks, named principles, proof before done), pointed at users instead of code: onboarding, activation, engagement, retention, and the analysis that tells you which of them moved.
@@ -82,7 +82,7 @@ The funnel shows iOS completing the profile step at about 56% against 80% on web
 
 ## With the other plugins
 
-Funnel Vision decides what to measure and whether it worked. It hands design to `ui-ux-studio` (`design-suite`), planning to `swe-plan`, and code to `askillissue`.
+This plugin decides what to measure and whether it worked. It hands design to `ui-ux-studio` (`design-suite`), planning to `swe-plan`, and code to `askillissue`.
 
 ## Credit
 

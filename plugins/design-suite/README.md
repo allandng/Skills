@@ -143,7 +143,8 @@ Two checks run before aesthetics, and they're the reason this skill is more than
 | `scripts/ai_tells.py` | Scans frontend source for mechanical AI-design tells — colors, fonts, class patterns, copy |
 | `scripts/contrast.py` | WCAG 2.2 contrast across the palette (same checker as `design-dna`) |
 | `scripts/craft_check.py` | Measures the positive craft floor (same checker as `design-dna`) |
-| `scripts/state_coverage.py` | Checks a `states.json` manifest: every state a screen's family requires has a file, quoted text, or a stated `n/a` reason behind it |
+| `scripts/state_coverage.py` | Checks a `states.json` manifest: every state a screen's family requires has a file, quoted text, or a stated `n/a` reason behind it. With `--bundle docs/` it traces screens to the use cases in a `swe-plan` bundle |
+| `scripts/capture.py` | Captures a page at 375, 768 and 1280 wide, per state and in dark, using any installed Chrome, Chromium or Edge. No install step |
 | `scripts/favicon.py` | Turns a designed SVG mark into `favicon.svg` with an embedded dark-mode variant, `icon-mono.svg` for pinned tabs, `site.webmanifest`, and a paste-ready head snippet |
 
 `favicon.py` optionally uses `cairosvg`/`rsvg-convert` to rasterize PNGs and `Pillow` for a 16px
@@ -173,6 +174,10 @@ and desktop each expect, and a table for translating between them), `states.md` 
 screen family, modeling state as one value, the coverage manifest), `principles.md`, `proof.md` (the
 ladder, claim labels, the reply frame, the decision log), `critique-panel.md`, and `help.md` (which
 playbook for which request, with prompts that work).
+
+`assets/worked-screen.md` is the `screen` playbook run end to end on a real page, with each check's
+actual output. State coverage read 9 of 9 while the mobile navigation was four times too tall; only
+opening the capture showed it. That is why the ladder's first rung is looking.
 
 The rest: `archetypes.md`, `copy-gate.md`, `ai-tells.md`, `design-tokens.md`, `favicon-and-head.md`,
 `interface-guidelines.md`, `modes.md`, `motion.md`, `site-architecture.md`, `stack-notes.md`, plus

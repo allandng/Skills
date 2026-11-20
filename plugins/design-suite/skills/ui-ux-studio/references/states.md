@@ -100,7 +100,7 @@ For anything larger than one screen, record coverage in `states.json` next to th
 
 Each value is one of:
 
-- `path` to a file that implements or shows the state,
+- `path` to a file that implements or shows the state (a capture from `scripts/capture.py --query state=<name>` counts),
 - `path#text`, where the text must appear in that file,
 - `n/a: <reason>`, with a reason a reviewer could disagree with.
 
@@ -110,6 +110,18 @@ Check it:
 python3 scripts/state_coverage.py states.json
 python3 scripts/state_coverage.py --template collection:table,object:detail   # print a blank manifest
 ```
+
+**Tracing to a plan.** When the product has a planning bundle from the `swe-plan` skill, give each screen a `covers` list and check both directions:
+
+```json
+{ "name": "Projects", "type": "collection:table", "covers": ["UC-01", "UC-02"], "states": { "...": "..." } }
+```
+
+```bash
+python3 scripts/state_coverage.py states.json --bundle docs/
+```
+
+That fails when a use case in the bundle has no screen, and when a screen claims an ID the bundle does not define. A use case with no screen is a requirement nobody designed. A screen that covers nothing is scope that arrived without a decision.
 
 The script fails on a required state with no entry, an entry whose file does not exist, text that is not in the file, and an `n/a` with no reason. It cannot tell whether a state is well designed. It can tell that one was never made, which is the common failure.
 

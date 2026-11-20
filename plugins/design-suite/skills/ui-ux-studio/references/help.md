@@ -44,6 +44,7 @@ Bigger jobs are playbooks in sequence. The usual chains:
 new product      app-shell → screen (the loop's screens first) → flow → critique
 redesign         design-dna survey → remix → variants on the winner → update the rest
 from a backend   spec-to-ui → app-shell for the chosen model → screen → flow
+from a plan      swe-plan bundle → spec-to-ui (keep the UC and E ids) → screen, traced with --bundle
 going mobile     design-dna teardown of the current app → platform-adapt → screen → critique
 cleanup          audit → design-system → update → visual-parity
 ```

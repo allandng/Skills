@@ -41,11 +41,31 @@ Two rules cover how they start:
 
 ## swe-plan
 
-1 skill. Plans software the way a senior architect would. [Plugin README](plugins/swe-plan)
+1 skill. Plans software the way a senior architect would, and checks the plan by script before it is handed over. [Plugin README](plugins/swe-plan)
 
 | Skill | What it does |
 |---|---|
-| `swe-plan` | `/start` interviews you, then writes a planning bundle: PRD, SRD, ERD, use case and sequence diagrams, ADRs, a delivery plan, and a traceability matrix. `/addon` surveys an existing repo and returns a ranked implementation plan with blast radius and doc updates. |
+| `swe-plan` | Turns an idea or a feature request into a plan a team can build against, and checks what the plan says about the code against the repo. |
+
+It works from playbooks. You describe the job; `/start` and `/addon` also work by name.
+
+**Make a plan**
+
+| Playbook | What you get |
+|---|---|
+| `start` | An interview, then a planning bundle: PRD, SRD, ERD, flows, ADRs, a delivery plan, a traceability matrix |
+| `addon` | For a feature in an existing repo: a scope fence you confirm, ranked options, a phased plan, blast radius |
+| `spike` | A throwaway test of the one thing the plan depends on, with the command and its output |
+| `decide` | One decision written up with what lost and when to reopen it |
+
+**Keep it true**
+
+| Playbook | What you get |
+|---|---|
+| `review` | Reviewers try to break the plan. Only findings they can point at survive |
+| `backfill` | Documents for a working codebase that has none |
+| `amend` | Docs brought back in line after the code moved |
+| `handoff` | A prompt for one phase that an implementing agent can run without improvising |
 
 ---
 

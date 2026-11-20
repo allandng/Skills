@@ -10,7 +10,7 @@ Work up it. Stop only when a rung genuinely does not apply, and write `n/a: <rea
 
 | # | Rung | How | Passes when |
 |---|---|---|---|
-| 1 | **Rendered** | Open the built page or app with whatever can render it here: a browser tool, a preview, a simulator, a screenshot script. Capture 375, 768 and 1280 wide, plus dark if a dark theme exists | You looked at each capture and it matches the plan's wireframe and hierarchy |
+| 1 | **Rendered** | `python3 scripts/capture.py <file-or-url>` writes 375, 768 and 1280 wide captures with any installed Chrome, Chromium or Edge. Add `--dark` if a dark theme exists and `--query state=<name>` per state. A browser tool, a preview or a simulator does the same job | You opened each capture and looked at it, and it matches the plan's wireframe and hierarchy |
 | 2 | **States** | `python3 scripts/state_coverage.py states.json` (`states.md`) | Exit 0, and every `n/a` has a reason you would defend |
 | 3 | **Content stress** | Zero items, one, a hundred. The 200-character name. The record with missing fields | Nothing overflows, truncates without a way to read it, or collapses |
 | 4 | **Keyboard** | Tab through each screen. Write the order down | Order follows reading order, focus is always visible, every action is reachable, overlays trap and return focus |
@@ -20,6 +20,8 @@ Work up it. Stop only when a rung genuinely does not apply, and write `n/a: <rea
 | 8 | **Motion** | With reduced motion on | Nothing essential is conveyed only by animation |
 | 9 | **Platform** | The `DEPARTURES` line from `platforms.md` | Each departure has a reason. Back, system gestures and targets behave as the platform expects |
 | 10 | **Parity** (update and visual-parity work only) | Side-by-side or image diff against the baseline | Differences are the intended ones, listed |
+
+A capture on disk is not a check. Looking at it is. In the worked example (`assets/worked-screen.md`) every script passed on a screen whose mobile navigation was four times too tall; only opening the 375 capture showed it.
 
 **If nothing here can render the work**, say so in the first line of the reply: "Not rendered: no browser or preview available in this session." Then give the one command or step that renders it. Do not describe how it looks. Inconclusive is not a pass, and a check on the wrong surface (a desktop capture for a mobile design) is not a check.
 

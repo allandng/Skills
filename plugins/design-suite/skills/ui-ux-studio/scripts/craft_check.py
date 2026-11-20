@@ -101,6 +101,15 @@ def analyse(css: str) -> dict:
             cm = re.search(r"clamp\([^,]+,[^,]+,\s*([\d.]+)(px|rem|em)", val)
             if cm:
                 sizes_raw.append(px(cm.group(1), cm.group(2)))
+    # The font shorthand carries a size too: `font: 600 var(--t-xl)/1 var(--display)`.
+    # The size is the first length, or the first var() that resolves to one.
+    for value in re.findall(r"(?<![-\w])font:\s*([^;{}]+)", css, re.I):
+        for token in re.findall(r"var\(\s*(--[\w-]+)[^)]*\)|([\d.]+(?:px|rem|em))(?![\w%])", value):
+            literal = token[1] or props.get(token[0], "")
+            m = LEN.match(literal)
+            if m:
+                sizes_raw.append(px(m.group(1), m.group(2)))
+                break
     # Type tokens that exist but are only referenced indirectly still count.
     for k, v in props.items():
         if re.search(r"(^--fs-|font-size|--text-|--type-)", k, re.I):

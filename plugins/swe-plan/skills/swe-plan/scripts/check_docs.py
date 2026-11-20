@@ -6,6 +6,11 @@ defined, product requirements nobody is building, system requirements that
 trace to nothing, broken relative links, missing status headers, and Mermaid
 diagrams that will not render.
 
+Also checks rigor, the parts a plan can skip and still look finished: a
+non-functional target with no number, a requirement with no acceptance
+criterion, an assumption with no stated consequence, a question nobody owns, a
+phase with no check or no undo, and a decision record with no rejected option.
+
 Python standard library only. Exit code is 1 when there are errors, so this
 drops into CI unchanged.
 
@@ -13,6 +18,7 @@ Usage:
     python check_docs.py docs/
     python check_docs.py docs/ --json
     python check_docs.py docs/ --strict     # warnings also fail
+    python check_docs.py docs/ --no-rigor   # structure only, for a bundle written before the rigor rules
 """
 
 from __future__ import annotations
@@ -272,8 +278,98 @@ def check_traceability(docs: dict[str, str], defs: dict[str, list], rep: Report)
 
 
 # --------------------------------------------------------------------------- #
+# Rigor: the parts a plan can leave out and still look finished.
 
-def run(root: Path, rep: Report) -> dict:
+PLACEHOLDER = re.compile(r"^(\.\.\.|…|tbd|todo|n/?a|\?+|-+|<[^>]*>)?$", re.I)
+ROW_ID = re.compile(r"\*{0,2}((?:PR|SR|NFR|UC|ADR|E|A|Q|R|T|P)-\d{2,4})\*{0,2}")
+
+# (id prefix, header text to find, level, what is wrong when the cell is empty)
+CELL_RULES = [
+    ("NFR", "measured", "error", "does not say how it will be measured"),
+    ("PR", "acceptance", "error", "has no acceptance criterion - if one cannot be written, make it a Q-##"),
+    ("A", "wrong means", "error", "does not say what breaks if it is wrong - without that it is a note, not a tripwire"),
+    ("A", "confirm by", "warning", "has no way to confirm it"),
+    ("Q", "who answers", "error", "has nobody to answer it"),
+    ("Q", "blocks", "error", "does not say what it blocks"),
+    ("R", "early warning", "warning", "has no early warning sign - it will be found by a user"),
+    ("R", "mitigation", "warning", "has no mitigation"),
+    ("T", "traces to", "warning", "does not trace to a requirement"),
+]
+PHASE_FIELDS = [
+    ("Verified by", "error", "has no check - a phase that cannot be verified cannot be called done"),
+    ("Reverts by", "error", "has no undo"),
+    ("Done when", "warning", "has no objective completion check"),
+]
+
+
+def tables(text: str):
+    """Yield (lowercased header cells, rows, line number of the first row) per table."""
+    lines = strip_code_blocks(text).split("\n")
+    i = 0
+    while i < len(lines):
+        if not lines[i].strip().startswith("|"):
+            i += 1
+            continue
+        start, block = i, []
+        while i < len(lines) and lines[i].strip().startswith("|"):
+            block.append([c.strip() for c in lines[i].strip().strip("|").split("|")])
+            i += 1
+        if len(block) >= 3 and all(re.fullmatch(r":?-{2,}:?", c) for c in block[1] if c):
+            yield [c.lower().strip("* ") for c in block[0]], block[2:], start + 3
+
+
+def check_rigor(docs: dict[str, str], rep: Report) -> None:
+    for name, raw in docs.items():
+        for header, rows, first_line in tables(raw):
+            for offset, cells in enumerate(rows):
+                ident = ROW_ID.fullmatch(cells[0]) if cells else None
+                if not ident:
+                    continue
+                prefix = ident.group(1).split("-")[0]
+                line = first_line + offset
+                for rule_prefix, column, level, message in CELL_RULES:
+                    if prefix != rule_prefix:
+                        continue
+                    index = next((i for i, h in enumerate(header) if column in h), None)
+                    if index is None or index >= len(cells):
+                        continue
+                    if PLACEHOLDER.match(cells[index]):
+                        rep.add(level, name, line, f"{ident.group(1)} {message}")
+                if prefix == "NFR":
+                    index = next((i for i, h in enumerate(header) if h.startswith("target")), None)
+                    if index is not None and index < len(cells) and not re.search(r"\d", cells[index]):
+                        rep.error(name, line, f"{ident.group(1)} target has no number - "
+                                              "\"fast\" is a feeling, \"p95 under 300ms\" is a requirement")
+
+        prose = strip_code_blocks(raw)
+
+        # Phases written as "### P-01 - name" followed by a two-column table.
+        for match in re.finditer(r"^#{2,6}\s+\*{0,2}(P-\d{2,4})\b.*$", prose, re.M):
+            rest = prose[match.end():]
+            end = re.search(r"^#{1,6}\s", rest, re.M)
+            block = rest[: end.start()] if end else rest
+            line = prose[: match.start()].count("\n") + 1
+            for label, level, message in PHASE_FIELDS:
+                found = re.search(rf"^\|\s*\*{{0,2}}{label}\*{{0,2}}\s*\|\s*(.*?)\s*\|\s*$", block, re.M | re.I)
+                if not found or PLACEHOLDER.match(found.group(1).strip()):
+                    rep.add(level, name, line, f"{match.group(1)} {message}")
+
+        # Decision records.
+        if re.search(r"(^|/)adr/\d", name, re.I):
+            options = re.search(r"^##\s+Options considered\s*$(.*?)(?=^##\s|\Z)", prose, re.S | re.M | re.I)
+            count = len(re.findall(r"^###\s", options.group(1), re.M)) if options else 0
+            if count < 2:
+                rep.error(name, None, f"records {count} option(s) - a decision with no alternative is a press release")
+            elif not re.search(r"rejected because\W+\w", options.group(1), re.I):
+                rep.error(name, None, "no option says why it was rejected - the rejected half is the useful half")
+            revisit = re.search(r"^##\s+Revisit when\s*$(.*?)(?=^##\s|\Z)", prose, re.S | re.M | re.I)
+            if not revisit or PLACEHOLDER.match(revisit.group(1).strip()):
+                rep.warn(name, None, "no \"Revisit when\" condition - nothing says when this decision should be reopened")
+
+
+# --------------------------------------------------------------------------- #
+
+def run(root: Path, rep: Report, rigor: bool = True) -> dict:
     md_files = sorted(p for p in root.rglob("*.md") if ".git" not in p.parts)
     if not md_files:
         rep.error(str(root), None, "no markdown files found")
@@ -326,6 +422,8 @@ def run(root: Path, rep: Report) -> dict:
             rep.warn(places[0][0], places[0][1], f"{ident} defined more than once ({spots})")
 
     check_traceability(docs, defs, rep)
+    if rigor:
+        check_rigor(docs, rep)
 
     return {
         "files": len(docs),
@@ -339,6 +437,8 @@ def main() -> int:
     ap.add_argument("path", help="the docs/ directory")
     ap.add_argument("--json", action="store_true", help="machine-readable output")
     ap.add_argument("--strict", action="store_true", help="warnings fail too")
+    ap.add_argument("--no-rigor", action="store_true",
+                    help="skip the rigor checks (numbers, acceptance criteria, owners, phase checks, rejected options)")
     args = ap.parse_args()
 
     root = Path(args.path).expanduser()
@@ -347,7 +447,7 @@ def main() -> int:
         return 2
 
     rep = Report()
-    summary = run(root, rep)
+    summary = run(root, rep, rigor=not args.no_rigor)
 
     if args.json:
         print(json.dumps({"summary": summary, "issues": rep.items}, indent=2))

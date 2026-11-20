@@ -392,6 +392,12 @@ Each phase ships on its own and can be reverted without unwinding earlier ones.
 Sequencing rules: the riskiest unknown goes in P-01, schema lands before the code
 that uses it, and any user-visible change of consequence ships behind a flag.
 
+## Parallel work
+For plans that several people or agents will execute. One line each:
+what must finish before anything else starts, which phases or tasks touch disjoint
+files and can run at once, what state they share, and the smallest split that is
+safe. If the honest answer is "one worker, in order", say that and why.
+
 ## Definition of done
 Applies to every task. Typically: tests pass, types check, linter clean, docs
 updated, reviewed, deployed to staging, rollback confirmed.
@@ -593,9 +599,10 @@ files from MAY TOUCH.
 ## Grounding check
 ```bash
 python scripts/verify_plan.py <this file> <repo>
+python scripts/check_addon.py <this file> <repo>
 ```
-Paste the result, or state that it came back clean. A plan delivered without this
-is a plan nobody checked.
+Paste both results, or state that each came back clean. A plan delivered without
+this is a plan nobody checked.
 
 ## Doc delta
 Which documents change, or a note that no bundle exists and `/start` can backfill one.

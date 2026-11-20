@@ -30,6 +30,8 @@ TWINS = [
      "plugins/design-suite/skills/design-dna/references/app-taxonomy.md"),
     ("plugins/design-suite/skills/ui-ux-studio/scripts/contrast.py",
      "plugins/design-suite/skills/design-dna/scripts/contrast.py"),
+    ("plugins/design-suite/skills/ui-ux-studio/scripts/craft_check.py",
+     "plugins/design-suite/skills/design-dna/scripts/craft_check.py"),
 ]
 # A shared file may name files that live in the other skill.
 SHARED = {"app-taxonomy.md"}

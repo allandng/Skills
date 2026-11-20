@@ -1,6 +1,6 @@
 ---
 name: swe-plan
-description: Senior-architect planning and documentation system for software projects. Two modes - /start runs a structured interview and produces a full planning bundle (PRD, SRD, ERD, use case and sequence diagrams, ADRs, delivery plan, traceability matrix), and /addon surveys an existing codebase and its tech stack, then produces a ranked implementation plan with blast radius and doc updates. Use this skill whenever the user is planning, scoping, architecting, or documenting software - including "how should I build X", "plan this feature", "write a PRD or spec or design doc", "make me an ERD", "draw a use case diagram", "add X to my app", "what's the best way to implement this in my codebase", or any request to make AI-produced work legible to teammates. Trigger it on /start and /addon by name, and trigger it even when the user only describes an app idea and asks where to begin.
+description: Senior-architect planning and documentation system for software projects. /start interviews you and produces a planning bundle (PRD, SRD, ERD, use case and sequence diagrams, ADRs, delivery plan, traceability matrix). /addon surveys an existing codebase and produces a scope-fenced, ranked implementation plan with blast radius and doc updates. Also runs spikes on untested assumptions, writes decisions as ADRs, has reviewers try to break a plan, backfills docs for an existing system, fixes drifted docs, and turns a phase into an implementation prompt. Plans are checked by script before handover. Use whenever the user is planning, scoping, architecting, or documenting software - "how should I build X", "plan this feature", "write a PRD or spec", "make me an ERD", "add X to my app", "what's the best way to implement this in my codebase", "are the docs still right". Trigger on /start and /addon by name, and when the user only describes an app idea and asks where to begin.
 ---
 
 # SWE Plan
@@ -28,6 +28,22 @@ Read the full playbook before running either mode - do not improvise from this t
 - `references/addon-mode.md` - the `/addon` playbook
 - `references/document-templates.md` - exact templates for every document
 - `references/diagrams.md` - Mermaid recipes for ERD, use case, sequence, state, context, deployment
+
+## Playbooks
+
+Both modes, and six smaller jobs, have a step list in `playbooks/`. Open the one that matches, copy its steps into your todo list as written (or keep the list in your reply when there is no todo tool), and work them in order. A step that does not apply keeps its line with `n/a: <reason>`, so a skipped step and a forgotten one never look the same. Each playbook ends with a **Reply** line that says what the user gets back. The playbook is the order of work; the references hold the detail.
+
+| Playbook | Trigger | Output |
+|---|---|---|
+| **start**, **addon** | The two modes above | As above |
+| **spike** | The plan depends on something nobody has tried: an API limit, a performance target, an integration | The question, the command that was run, what it printed, and what the plan now does because of it |
+| **decide** | One hard choice: "Postgres or SQLite", "monolith or services" | An ADR with the rejected options and a condition for reopening it |
+| **review** | "Is this plan any good", a plan going to an agent unattended, anything contested | Findings that reviewers could point at, and a count of the ones dropped |
+| **backfill** | A working codebase with no documents | A bundle describing what is there, with what was not read stated |
+| **amend** | A phase shipped, a merge landed, "are the docs still right" | Documents made true again, decisions superseded, questions closed |
+| **handoff** | An approved plan and "build it" | A prompt for one phase, carrying the allowlist and the prohibitions verbatim |
+
+Not sure which fits, or the user asks what this skill can do: `references/help.md`.
 
 ## Step 0 - always run this first, in both modes
 
@@ -76,6 +92,17 @@ Default to **Standard** unless the answers clearly say otherwise. When in doubt,
 
 **7. Write for the teammate who joins on Tuesday.**
 They have not been in any of these conversations. They do not know the acronyms. Expand a term the first time it appears. If a sentence only makes sense to someone who watched the project happen, rewrite it.
+
+**8. Settle it by running.**
+When the plan is about to depend on something nobody has checked - a third-party limit, a performance number, an integration, a library's support for the case - run a spike before writing the plan on top of it (`playbooks/spike.md`). A paragraph of confident reasoning about an API is worth less than one request sent to it. What cannot be run stays marked as inferred.
+
+**9. Every phase ends in a check and an undo.**
+A phase is done when a named test or command says so, and it can be reverted without unwinding the phases before it. A phase with no "Verified by" is not a phase, it is a hope. `check_docs.py` and `check_addon.py` enforce this.
+
+**10. Done means checked.**
+A plan is finished when it has been through the ladder in `references/proof.md`: the scripts, a falsifiability pass, and a cold read by someone who was not in the conversation. Every claim in the reply is marked stated, verified, ran, inferred, assumed or unknown. Never hand the user a check you could have run.
+
+When a decision is hard, `references/principles.md` has one rule per situation. Name the principle that changed a decision; skip the ones that changed nothing.
 
 ## The document bundle
 
@@ -136,7 +163,7 @@ If the user has an `anti-ai-writing` skill available, run the finished prose thr
 
 ## Scripts
 
-Both are Python standard library only - no installs needed.
+All are Python standard library only - no installs needed.
 
 **`scripts/survey_repo.py`** - reads a codebase and prints JSON describing it: detected stack and manifests with dependency lists, language breakdown by lines of code, directory tree, entry points, test layout, migrations and schema files, infrastructure and CI files, route and endpoint hints, and git activity. Run it at the top of `/addon`.
 
@@ -156,18 +183,49 @@ python scripts/verify_plan.py <plan> <repo> --json --no-symbols
 
 Exit code is non-zero when a path is missing. When one turns out not to exist, go back and read the code - do not substitute another guess.
 
+**`scripts/check_addon.py`** - the contract check for `/addon`. `verify_plan.py` asks whether everything the plan names exists; this asks whether the plan agrees with itself. It fails when MAY TOUCH lists a file that is not in the VERIFIED ledger, when the seam or a phase reaches outside the fence, when a phase has no "Verified by" or "Reverts by", when Out of scope is empty, when the options have no "Fails when", when there is no rollback, or when the fence says neither confirmed nor unconfirmed.
+
+```bash
+python scripts/check_addon.py docs/addons/<feature>.md <path-to-repo>
+```
+
 **`scripts/check_docs.py`** - lints a finished bundle. It checks that every `PR-##` is covered by at least one `SR-##`, that no requirement is referenced but never defined, that the traceability matrix matches the documents, that relative links resolve, that every doc has a status header, and that Mermaid blocks are well-formed and use quoted labels where they need to be.
+
+It also checks rigor - the parts a plan can leave out and still look finished: an `NFR-##` whose target has no number or no way to measure it, a `PR-##` with no acceptance criterion, an `A-##` that does not say what breaks if it is wrong, a `Q-##` nobody owns, a phase with no check or no undo, and an ADR with no rejected option.
 
 ```bash
 python scripts/check_docs.py docs/
 python scripts/check_docs.py docs/ --json
+python scripts/check_docs.py docs/ --no-rigor   # only for a bundle written before the rigor rules
 ```
 
 Run it before handing the bundle over, and fix what it reports. Exit code is non-zero when there are errors, so it drops into CI as-is.
 
+**`scripts/doc_drift.py`** - finds documents the code has moved past. For each document it reads the Updated date and the files it names, and asks git which of those files changed since, and which no longer exist. Run it at the top of `amend`.
+
+```bash
+python scripts/doc_drift.py docs/ <path-to-repo>
+```
+
+It finds where to look. Whether the change mattered is a judgment: read the diff, then amend the document or bump its date to record that it still holds.
+
 ## Finishing either mode
 
-1. Run `check_docs.py` and fix every error. Warnings are a judgment call - resolve or explain them.
+1. Climb the ladder in `references/proof.md`. At minimum: run `check_docs.py` and fix every error (warnings are a judgment call - resolve or explain them), and for `/addon` run `verify_plan.py` and `check_addon.py`.
 2. Write or refresh `00-orientation.md` last.
-3. Deliver a **handoff summary** in chat, not just files: what you produced, the three decisions that most shape the build, every open question with who needs to answer it, and the single recommended next action.
+3. Deliver a **handoff summary** in chat, not just files, in the reply frame from `references/proof.md`: what you produced, the three decisions that most shape the build, what was checked and what the plan still rests on unverified, every open question with who needs to answer it, and the single recommended next action.
 4. Offer the PR-description version - a paragraph the user can paste into a pull request or a Slack message so teammates get the change without opening the docs.
+
+## Reference map
+
+| File | Read it when |
+|---|---|
+| `playbooks/` | Always - the step list for the job in hand |
+| `references/help.md` | The request does not match one job, or the user asks what this can do |
+| `references/start-mode.md`, `references/addon-mode.md` | Running either mode |
+| `references/document-templates.md`, `references/diagrams.md` | Writing any document or diagram |
+| `references/principles.md` | A planning decision is hard - one rule per situation |
+| `references/proof.md` | Before handing anything over - the ladder, the claim labels, the reply frame, the decision log |
+| `references/review-panel.md` | Running the review playbook |
+
+The playbook form, the proof-before-done discipline, the review panel (after `interrogate`), the `spike` playbook (after Prototype), and most of the rules in `principles.md` are adapted from pstack by Lauren Tan (MIT).
